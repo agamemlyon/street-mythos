@@ -30,31 +30,48 @@ namespace StreetMythos.Editor
             ti.compressionQuality = 50;
         }
 
+        public static int CountTriangles(GameObject root) =>
+            root.GetComponentsInChildren<MeshFilter>(true).Where(m => m.sharedMesh != null).Sum(m => (int)TriCount(m.sharedMesh))
+          + root.GetComponentsInChildren<SkinnedMeshRenderer>(true).Where(m => m.sharedMesh != null).Sum(m => (int)TriCount(m.sharedMesh));
+
+        static long TriCount(Mesh mesh)
+        {
+            long n = 0;
+            for (int i = 0; i < mesh.subMeshCount; i++) n += mesh.GetIndexCount(i) / 3;
+            return n;
+        }
+
+        static void CheckBudget(string path, GameObject root)
+        {
+            int tris = CountTriangles(root);
+            int budget = BudgetFor(path);
+            if (tris > budget)
+                Debug.LogError($"[Import] HORS BUDGET {path} : {tris} triangles pour {budget}");
+            else
+                Debug.Log($"[Import] OK {path} : {tris}/{budget} triangles");
+        }
+
+        // FBX : les matériaux sont modifiables à l'import, on y pose directement le shader toon
         void OnPostprocessModel(GameObject root)
         {
             if (!assetPath.StartsWith(Incoming)) return;
-
-            int tris = root.GetComponentsInChildren<MeshFilter>(true).Where(m => m.sharedMesh != null)
-                           .Sum(m => m.sharedMesh.triangles.Length / 3)
-                     + root.GetComponentsInChildren<SkinnedMeshRenderer>(true).Where(m => m.sharedMesh != null)
-                           .Sum(m => m.sharedMesh.triangles.Length / 3);
-            int budget = BudgetFor(assetPath);
-            if (tris > budget)
-                Debug.LogError($"[Import] HORS BUDGET {assetPath} : {tris} triangles pour {budget}");
-            else
-                Debug.Log($"[Import] OK {assetPath} : {tris}/{budget} triangles");
-
+            CheckBudget(assetPath, root);
             var shader = Shader.Find(ToonShader);
             if (shader == null) return;
             foreach (var r in root.GetComponentsInChildren<Renderer>(true))
                 foreach (var m in r.sharedMaterials.Where(m => m != null))
-                {
-                    var tex = m.HasProperty("_BaseMap") ? m.GetTexture("_BaseMap") : m.mainTexture;
-                    var color = m.HasProperty("_BaseColor") ? m.GetColor("_BaseColor") : Color.white;
-                    m.shader = shader;
-                    if (tex != null) m.SetTexture("_BaseMap", tex);
-                    m.SetColor("_BaseColor", color);
-                }
+                    ToonConverter.CopyToToon(m, m, shader);
+        }
+
+        // GLB et VRM passent par les importeurs d'UniVRM : contrôle du budget après import,
+        // le shader toon est posé à l'instanciation par ToonConverter
+        static void OnPostprocessAllAssets(string[] imported, string[] deleted, string[] moved, string[] movedFrom)
+        {
+            foreach (var path in imported.Where(p => p.StartsWith(Incoming) && (p.EndsWith(".glb") || p.EndsWith(".vrm"))))
+            {
+                var root = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+                if (root != null) CheckBudget(path, root);
+            }
         }
     }
 }

@@ -27,3 +27,4 @@ results*.xml
 # Outils
 node_modules/
 Tools/out/
+*.slnx
