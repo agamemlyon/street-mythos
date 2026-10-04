@@ -1,0 +1,7 @@
+{
+    "name": "StreetMythos.Editor",
+    "rootNamespace": "StreetMythos.Editor",
+    "references": ["StreetMythos.Core"],
+    "includePlatforms": ["Editor"],
+    "autoReferenced": false
+}

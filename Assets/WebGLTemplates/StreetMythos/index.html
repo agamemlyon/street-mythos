@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{{ PRODUCT_NAME }}}</title>
+  <style>
+    html, body { margin: 0; height: 100%; background: #1B1B3A; color: #FFB35C; font-family: system-ui, sans-serif; overflow: hidden; }
+    #unity-canvas { width: 100%; height: 100%; display: block; background: #1B1B3A; }
+    #loader { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px;
+              background: radial-gradient(circle at 50% 70%, #3D2C6B 0%, #1B1B3A 70%); }
+    #loader h1 { margin: 0; font-size: clamp(28px, 5vw, 56px); letter-spacing: .04em; text-shadow: 0 0 18px #FF4F9A; }
+    #loader p { margin: 0; color: #8FA3C7; }
+    #bar { width: min(420px, 80vw); height: 10px; border: 2px solid #FFB35C; border-radius: 6px; }
+    #fill { height: 100%; width: 0; background: #FFB35C; transition: width .2s; }
+    #mobile { display: none; position: fixed; inset: 0; align-items: center; justify-content: center; text-align: center; padding: 24px;
+              background: #1B1B3A; color: #FFB35C; font-size: 20px; }
+  </style>
+</head>
+<body>
+  <canvas id="unity-canvas" tabindex="-1"></canvas>
+  <div id="loader">
+    <h1>Street Mythos</h1>
+    <p>La brume se lève sur Lyon…</p>
+    <div id="bar"><div id="fill"></div></div>
+  </div>
+  <div id="mobile">Street Mythos se joue sur ordinateur, dans Chrome, Edge, Firefox ou Safari.</div>
+  <script>
+    // SPEC D1 : navigateurs de bureau seulement
+    if (/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)) {
+      document.getElementById("mobile").style.display = "flex";
+    } else {
+      const script = document.createElement("script");
+      script.src = "Build/{{{ LOADER_FILENAME }}}";
+      script.onload = () => {
+        createUnityInstance(document.querySelector("#unity-canvas"), {
+          dataUrl: "Build/{{{ DATA_FILENAME }}}",
+          frameworkUrl: "Build/{{{ FRAMEWORK_FILENAME }}}",
+#if USE_WASM
+          codeUrl: "Build/{{{ CODE_FILENAME }}}",
+#endif
+          streamingAssetsUrl: "StreamingAssets",
+          companyName: {{{ JSON.stringify(COMPANY_NAME) }}},
+          productName: {{{ JSON.stringify(PRODUCT_NAME) }}},
+          productVersion: {{{ JSON.stringify(PRODUCT_VERSION) }}},
+        }, (p) => { document.getElementById("fill").style.width = (100 * p) + "%"; })
+        .then(() => { document.getElementById("loader").remove(); })
+        .catch((e) => { document.querySelector("#loader p").textContent = "Erreur de chargement : " + e; });
+      };
+      document.body.appendChild(script);
+    }
+  </script>
+</body>
+</html>

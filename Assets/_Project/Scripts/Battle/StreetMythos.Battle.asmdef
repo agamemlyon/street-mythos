@@ -1,0 +1,7 @@
+{
+    "name": "StreetMythos.Battle",
+    "rootNamespace": "StreetMythos.Battle",
+    "references": [],
+    "noEngineReferences": true,
+    "autoReferenced": true
+}
