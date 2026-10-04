@@ -12,7 +12,7 @@
 - Lampadaire Higgsfield : 2 610 triangles pour un budget de 3 000. Coût total en crédits du J0 : 31.
 
 **Reste pour clore le J0** :
-1. Samy : régler la page itch.io (jouable dans le navigateur, 1280×720, bouton plein écran), puis tester.
+1. Fait le 4 octobre : page itch.io réglée, Samy y voit la rue de nuit.
 2. Samy : créer Yanis dans VRoid → `Art/Incoming/hero_yanis.vrm`, puis clips Mixamo.
 3. Claude : importer Yanis animé, corriger le halo des lampadaires et les 3 shaders URP non supportés, mesurer sur une machine à GPU intégré, créer le clone `StreetMythos-build`, ouvrir la PR vers main.
 4. Bilan go/no-go sur D1 à D5, puis validation de Samy avant le J1.
