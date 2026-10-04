@@ -26,7 +26,7 @@ namespace StreetMythos.Editor
             PlayerSettings.SetUseDefaultGraphicsAPIs(BuildTarget.WebGL, false);
             PlayerSettings.SetGraphicsAPIs(BuildTarget.WebGL, new[] { GraphicsDeviceType.OpenGLES3 });
             PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Brotli;
-            PlayerSettings.WebGL.decompressionFallback = false; // à activer si itch.io sert mal le Brotli
+            PlayerSettings.WebGL.decompressionFallback = true; // itch.io ne sert pas les .br avec Content-Encoding : le loader décompresse lui-même
             PlayerSettings.WebGL.dataCaching = true;
             PlayerSettings.WebGL.exceptionSupport = WebGLExceptionSupport.ExplicitlyThrownExceptionsOnly;
             if (AssetDatabase.IsValidFolder("Assets/WebGLTemplates/StreetMythos"))
