@@ -1,0 +1,27 @@
+# Mots interdits dans tout texte du jeu (SPEC § 3.6). Un mot par ligne, comparaison sans accents ni casse, mot entier.
+# Insultes graves et termes discriminants : la liste s'enrichit à chaque cas limite tranché par Samy.
+connard
+connasse
+enculé
+salope
+pute
+putain
+bâtard
+nègre
+bougnoule
+pédé
+pd
+tarlouze
+gogol
+mongol
+triso
+attardé
+youpin
+bicot
+chinetoque
+drogue
+shit
+beuh
+flingue
+kalach
+gun

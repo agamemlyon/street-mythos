@@ -25,6 +25,10 @@ namespace StreetMythos.BattleView
         public GameObject[] HeroPrefabs;     // dans l'ordre de HeroIds
         public string[] HeroIds = { "yanis", "ines", "momo" };
         public Material ToonTemplate;
+        public string[] EnemyPrefabIds = { };          // préfixes d'identifiant d'ennemi
+        public GameObject[] EnemyPrefabs = { };
+        public EnemyMotion.Style[] EnemyStyles = { };
+        public Material BrumeMaterial;
 
         [Header("Debug")]
         public bool AutoPlay;                // l'IA joue les deux camps (captures, tests)
@@ -43,6 +47,11 @@ namespace StreetMythos.BattleView
         void Start()
         {
             if (Application.absoluteURL.Contains("auto=1") || Environment.GetCommandLineArgs().Contains("-autoplay")) AutoPlay = true;
+            // Debug : ?combat=<rencontre>&niveau=<n> pour tester un combat précis dans le navigateur
+            var m = System.Text.RegularExpressions.Regex.Match(Application.absoluteURL, @"combat=([a-z0-9_]+)");
+            if (m.Success) EncounterId = m.Groups[1].Value;
+            m = System.Text.RegularExpressions.Regex.Match(Application.absoluteURL, @"niveau=([0-9]+)");
+            if (m.Success) HeroLevel = int.Parse(m.Groups[1].Value);
             _data = new GameData(SkillsJson.text, HeroesJson.text, EnemiesJson.text, EncountersJson.text);
             _input = new ReactionInput();
             EnsureEventSystem();
@@ -96,10 +105,43 @@ namespace StreetMythos.BattleView
             return Placeholder(PrimitiveType.Capsule, new Color(1f, 0.6f, 0.2f), 1f);
         }
 
-        // Ennemis provisoires (formes simples) en attendant leurs modèles du lot 5
+        // Ennemis : modèle Higgsfield si disponible (préfixe d'identifiant), animé par code ;
+        // les Brumeux sont faits de brume (shader), sans modèle
         GameObject SpawnEnemy(BattleUnit u)
         {
             string id = u.Def.Id;
+            for (int i = 0; i < EnemyPrefabIds.Length && i < EnemyPrefabs.Length; i++)
+                if (id.StartsWith(EnemyPrefabIds[i]) && EnemyPrefabs[i] != null)
+                {
+                    var go = Instantiate(EnemyPrefabs[i]);
+                    var motion = go.AddComponent<EnemyMotion>();
+                    motion.Kind = EnemyStyles[i];
+                    return go;
+                }
+            if (id.StartsWith("brumeux") && BrumeMaterial != null) return Mist();
+            return PlaceholderFor(id);
+        }
+
+        GameObject Mist()
+        {
+            var root = new GameObject("Brumeux");
+            var body = new GameObject("Corps");
+            body.transform.SetParent(root.transform, false);
+            foreach (var (pos, size) in new[] { (new Vector3(0, 0.9f, 0), 1.1f), (new Vector3(0.15f, 1.6f, 0), 0.7f), (new Vector3(-0.2f, 0.4f, 0.1f), 0.8f) })
+            {
+                var s = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                Destroy(s.GetComponent<Collider>());
+                s.transform.SetParent(body.transform, false);
+                s.transform.localPosition = pos;
+                s.transform.localScale = Vector3.one * size;
+                s.GetComponent<Renderer>().sharedMaterial = BrumeMaterial;
+            }
+            root.AddComponent<EnemyMotion>().Kind = EnemyMotion.Style.Mist;
+            return root;
+        }
+
+        GameObject PlaceholderFor(string id)
+        {
             if (id.StartsWith("pigeon")) return Placeholder(PrimitiveType.Sphere, new Color(0.55f, 0.6f, 0.75f), 0.6f);
             if (id.StartsWith("brumeux")) return Placeholder(PrimitiveType.Capsule, new Color(0.56f, 0.64f, 0.78f), 1.1f);
             if (id.StartsWith("lion")) return Placeholder(PrimitiveType.Cube, new Color(0.8f, 0.75f, 0.62f), 1.2f);

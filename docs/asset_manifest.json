@@ -464,6 +464,68 @@
    "triangles": 28950,
    "cost_credits": 8,
    "license": "Higgsfield, usage commercial à vérifier avant publication"
+  },
+  {
+   "source": "higgsfield",
+   "license": "Higgsfield, usage commercial à vérifier avant publication",
+   "id": "concept_ennemis_q1",
+   "type": "concept",
+   "model": "gpt_image_2_5",
+   "job_ids": [
+    "15292f88-1ae9-46e6-8f2f-765105a10791",
+    "66c37e31-624f-4eb7-a070-1c33dc34e8c8",
+    "235df240-4230-41c5-b134-396ae48f7194",
+    "8b7d5304-58ad-4c73-b114-6111c61ae65c"
+   ],
+   "cost_credits": 6
+  },
+  {
+   "source": "higgsfield",
+   "license": "Higgsfield, usage commercial à vérifier avant publication",
+   "id": "enemy_pigeon",
+   "type": "enemy_3d",
+   "model": "meshy_v7_image_to_3d",
+   "job_id": "4e5bb1a8-e23b-46d3-ab0a-2265f613b3e7",
+   "triangles": 5182,
+   "budget": 15000,
+   "cost_credits": 38,
+   "notes": "animé par code (EnemyMotion.Pigeon)"
+  },
+  {
+   "source": "higgsfield",
+   "license": "Higgsfield, usage commercial à vérifier avant publication",
+   "id": "enemy_lion",
+   "type": "enemy_3d",
+   "model": "meshy_v7_image_to_3d",
+   "job_id": "fecfadb2-e909-4cac-a1ae-73f7b5dbb1c1",
+   "triangles": 8296,
+   "budget": 15000,
+   "cost_credits": 38,
+   "notes": "animé par code (Stone)"
+  },
+  {
+   "source": "higgsfield",
+   "license": "Higgsfield, usage commercial à vérifier avant publication",
+   "id": "enemy_controleur",
+   "type": "enemy_3d_rigged",
+   "model": "meshy_v7_image_to_3d + rig + idle",
+   "job_id": "40ef1424-14b9-4076-bd82-8d2ea278a817",
+   "triangles": 12421,
+   "budget": 15000,
+   "cost_credits": 47.5,
+   "notes": "flotte par code (Ghost)"
+  },
+  {
+   "source": "higgsfield",
+   "license": "Higgsfield, usage commercial à vérifier avant publication",
+   "id": "boss_gros_caillou",
+   "type": "boss_3d",
+   "model": "meshy_v7_image_to_3d",
+   "job_id": "861ac376-9766-46af-803d-04a9b6d01f2d",
+   "triangles": 19827,
+   "budget": 40000,
+   "cost_credits": 38,
+   "notes": "animé par code (Golem)"
   }
  ]
 }

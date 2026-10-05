@@ -16,6 +16,7 @@ namespace StreetMythos.Editor
             string name = System.IO.Path.GetFileName(path).ToLowerInvariant();
             if (name.StartsWith("hero_")) return 30000;
             if (name.StartsWith("npc_")) return 15000;
+            if (name.StartsWith("enemy_")) return 15000;
             if (name.StartsWith("prop_")) return 3000;
             if (name.StartsWith("boss_")) return 40000;
             return 10000;

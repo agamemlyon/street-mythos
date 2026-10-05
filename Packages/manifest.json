@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.inkle.ink-unity-integration": "https://github.com/inkle/ink-unity-integration.git#upm",
     "com.unity.addressables": "2.10.3",
     "com.unity.cinemachine": "3.1.4",
     "com.unity.ide.visualstudio": "2.0.26",

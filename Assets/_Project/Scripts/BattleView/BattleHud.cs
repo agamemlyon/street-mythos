@@ -25,7 +25,7 @@ namespace StreetMythos.BattleView
             _banner = root.Q<Label>("banner");
         }
 
-        public static string Short(BattleUnit u) => u.Def.Name.Split(' ')[0];
+        public static string Short(BattleUnit u) { var w = u.Def.Name.Split(' ')[0]; return w.Length > 7 ? w.Substring(0, 6) + '.' : w; }
 
         public void Build(BattleModel model)
         {

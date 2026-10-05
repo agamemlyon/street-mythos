@@ -24,6 +24,13 @@ namespace StreetMythos.Editor
                 MakeHeroPrefab("hero_ines_walk", "Hero_Ines", 1.65f),
                 MakeHeroPrefab("hero_momo_walk", "Hero_Momo", 1.85f),
             };
+            var enemies = new[]
+            {
+                ("pigeon", MakeEnemyPrefab("enemy_pigeon", "Ennemi_Pigeon", 0.7f), EnemyMotion.Style.Pigeon),
+                ("lion", MakeEnemyPrefab("enemy_lion", "Ennemi_Lion", 1.5f), EnemyMotion.Style.Stone),
+                ("controleur", MakeEnemyPrefab("enemy_controleur", "Ennemi_Controleur", 1.8f), EnemyMotion.Style.Ghost),
+                ("gros_caillou", MakeEnemyPrefab("boss_gros_caillou", "Boss_Gros_Caillou", 3.2f), EnemyMotion.Style.Golem),
+            }.Where(e => e.Item2 != null).ToArray();
             var panel = MakePanelSettings();
 
             var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
@@ -103,6 +110,10 @@ namespace StreetMythos.Editor
             ctrl.HeroPrefabs = heroes;
             ctrl.ToonTemplate = Mat(toon, "M_Ennemi_Provisoire", Color.white);
             ctrl.EncounterId = "q1_tuto_pigeons";
+            ctrl.EnemyPrefabIds = enemies.Select(e => e.Item1).ToArray();
+            ctrl.EnemyPrefabs = enemies.Select(e => e.Item2).ToArray();
+            ctrl.EnemyStyles = enemies.Select(e => e.Item3).ToArray();
+            ctrl.BrumeMaterial = BrumeMat();
 
             EditorSceneManager.SaveScene(scene, ArenaPath);
 
@@ -113,6 +124,35 @@ namespace StreetMythos.Editor
             SetBootTarget("Arena_Q1");
             AssetDatabase.SaveAssets();
             Debug.Log("[Arène] Arena_Q1 générée");
+        }
+
+        // Vérifie l'orientation des ennemis : chacun posé comme dans l'arène (tourné vers -X),
+        // photographié depuis le camp des héros. On doit voir leur face.
+        public static void CaptureEnemies()
+        {
+            EditorSceneManager.NewScene(NewSceneSetup.DefaultGameObjects, NewSceneMode.Single);
+            var cam = Camera.main;
+            cam.clearFlags = CameraClearFlags.SolidColor;
+            cam.backgroundColor = new Color(0.24f, 0.17f, 0.42f);
+            float z = 0;
+            foreach (var name in new[] { "Ennemi_Pigeon", "Ennemi_Lion", "Ennemi_Controleur", "Boss_Gros_Caillou" })
+            {
+                var p = AssetDatabase.LoadAssetAtPath<GameObject>($"{Root}/Art/Characters/{name}.prefab");
+                if (p == null) continue;
+                var g = (GameObject)PrefabUtility.InstantiatePrefab(p);
+                g.transform.SetPositionAndRotation(new Vector3(0, 0, z), Quaternion.Euler(0, 90f, 0));
+                z += 4f;
+            }
+            cam.transform.position = new Vector3(-9f, 2.5f, 6f);
+            cam.transform.LookAt(new Vector3(0, 1f, 6f));
+            var rt = new RenderTexture(1600, 600, 24);
+            cam.targetTexture = rt;
+            cam.Render();
+            RenderTexture.active = rt;
+            var tex = new Texture2D(1600, 600, TextureFormat.RGB24, false);
+            tex.ReadPixels(new Rect(0, 0, 1600, 600), 0, 0);
+            tex.Apply();
+            System.IO.File.WriteAllBytes("Builds/capture_ennemis.png", tex.EncodeToPNG());
         }
 
         static Transform[] Slots(string name, float x, float yaw, int count, float spacing)
@@ -140,12 +180,13 @@ namespace StreetMythos.Editor
             EditorSceneManager.SaveScene(boot);
         }
 
-        static GameObject MakeHeroPrefab(string glb, string prefabName, float height)
+        static GameObject MakeHeroPrefab(string glb, string prefabName, float height, float yaw = 0f)
         {
             var src = AssetDatabase.LoadAssetAtPath<GameObject>($"{Root}/Art/Incoming/{glb}.glb");
             if (src == null) { Debug.LogWarning($"[Arène] {glb} absent"); return null; }
             var inst = (GameObject)PrefabUtility.InstantiatePrefab(src);
             inst.name = prefabName;
+            inst.transform.rotation = Quaternion.Euler(0, yaw, 0);
             ToonConverter.ConvertInstance(inst);
             var b = inst.GetComponentsInChildren<Renderer>().Select(r => r.bounds).Aggregate((a, c) => { a.Encapsulate(c); return a; });
             inst.transform.localScale *= height / b.size.y;
@@ -158,6 +199,17 @@ namespace StreetMythos.Editor
             var prefab = PrefabUtility.SaveAsPrefabAsset(root, path);
             Object.DestroyImmediate(root);
             return prefab;
+        }
+
+        // yaw : correction d'orientation des modèles générés qui ne regardent pas vers -Z
+        static GameObject MakeEnemyPrefab(string glb, string prefabName, float height, float yaw = 0f) => MakeHeroPrefab(glb, prefabName, height, yaw);
+
+        static Material BrumeMat()
+        {
+            string path = Root + "/Settings/M_Brume.mat";
+            var m = AssetDatabase.LoadAssetAtPath<Material>(path);
+            if (m == null) { m = new Material(Shader.Find("StreetMythos/Brume")); AssetDatabase.CreateAsset(m, path); }
+            return m;
         }
 
         static PanelSettings MakePanelSettings()
