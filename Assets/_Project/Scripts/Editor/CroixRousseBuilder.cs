@@ -41,12 +41,11 @@ namespace StreetMythos.Editor
             moon.transform.rotation = Quaternion.Euler(50f, -40f, 0);
 
             var level = new GameObject("Quartier").transform;
-            var pave = M("M_CR_Paves", new Color(0.36f, 0.33f, 0.42f));
-            // La place (départ), la montée (rampe), le plateau du haut
-            Block(level, "Place", new Vector3(0, -0.25f, 10), new Vector3(16, 0.5f, 22), pave);
-            var ramp = Block(level, "Montee_Grande_Cote", new Vector3(0, 2.75f, 35.5f), new Vector3(10, 0.5f, 30.6f), pave);
+            // La place (départ), la montée (rampe), le plateau du haut, pavés texturés (lot 7)
+            Block(level, "Place", new Vector3(0, -0.25f, 10), new Vector3(16, 0.5f, 22), Tex("M_CR_Paves_Place", "tex_paves", new Vector2(8, 11)));
+            var ramp = Block(level, "Montee_Grande_Cote", new Vector3(0, 2.75f, 35.5f), new Vector3(10, 0.5f, 30.6f), Tex("M_CR_Paves_Montee", "tex_paves", new Vector2(5, 15)));
             ramp.transform.rotation = Quaternion.Euler(-11.3f, 0, 0);
-            Block(level, "Plateau", new Vector3(0, 5.75f, 72), new Vector3(18, 0.5f, 44), pave);
+            Block(level, "Plateau", new Vector3(0, 5.75f, 72), new Vector3(18, 0.5f, 44), Tex("M_CR_Paves_Plateau", "tex_paves", new Vector2(9, 22)));
 
             // Façades des deux côtés, avec collisions
             var colors = new[] { new Color(0.62f, 0.45f, 0.42f), new Color(0.66f, 0.55f, 0.4f), new Color(0.5f, 0.47f, 0.6f), new Color(0.58f, 0.5f, 0.5f) };
@@ -58,7 +57,7 @@ namespace StreetMythos.Editor
                 foreach (float side in new[] { -1f, 1f })
                 {
                     float h = 7f + (n % 3) * 2f;
-                    Block(level, $"Facade_{n++}", new Vector3(side * (halfWidth + 1.5f), ground + h / 2f, z + 3f), new Vector3(3f, h, 6f), M($"M_CR_Facade_{n % 4}", colors[n % 4]));
+                    Block(level, $"Facade_{n++}", new Vector3(side * (halfWidth + 1.5f), ground + h / 2f, z + 3f), new Vector3(3f, h, 6f), Tex($"M_CR_Facade_{n % 3}", FacadeTextures[n % 3], Vector2.one));
                 }
             }
             Block(level, "Mur_fond", new Vector3(0, 10, 96), new Vector3(24, 20, 2), M("M_CR_Facade_0", colors[0]));
@@ -226,6 +225,30 @@ namespace StreetMythos.Editor
         }
 
         static Material M(string name, Color c) => ArenaBuilder.Mat(_toon, name, c);
+
+        static readonly string[] FacadeTextures = { "tex_facade_ocre", "tex_facade_rose", "tex_facade_jaune" };
+
+        // Matériau toon texturé avec une texture Higgsfield du quartier (1024, DXT Crunch)
+        static Material Tex(string name, string texture, Vector2 tiling)
+        {
+            string path = $"{Root}/Art/Environments/Q1_CroixRousse/{texture}.png";
+            var ti = AssetImporter.GetAtPath(path) as TextureImporter;
+            if (ti != null && (ti.maxTextureSize != 1024 || !ti.crunchedCompression))
+            {
+                ti.maxTextureSize = 1024;
+                ti.crunchedCompression = true;
+                ti.compressionQuality = 50;
+                ti.SaveAndReimport();
+            }
+            var m = M(name, Color.white);
+            var tex = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+            if (tex != null)
+            {
+                m.SetTexture("_BaseMap", tex);
+                m.SetTextureScale("_BaseMap", tiling);
+            }
+            return m;
+        }
 
         static void Fit(GameObject go, float height)
         {

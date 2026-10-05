@@ -42,7 +42,8 @@ namespace StreetMythos.Editor
         // Taille réelle des fichiers livrés, comparée au budget de démarrage (25 Mo)
         static void WriteSizeReport()
         {
-            var files = Directory.GetFiles(OutputDir, "*", SearchOption.AllDirectories);
+            // Les vidéos (StreamingAssets) sont lues à la demande : hors budget de démarrage
+            var files = Directory.GetFiles(OutputDir, "*", SearchOption.AllDirectories).Where(f => !f.Replace('\\', '/').Contains("/StreamingAssets/")).ToArray();
             long total = files.Sum(f => new FileInfo(f).Length);
             var lines = files.Select(f => $"{new FileInfo(f).Length / 1024,10} Ko  {f.Replace('\\', '/')}").ToList();
             lines.Add($"TOTAL {total / (1024f * 1024f):0.00} Mo (budget démarrage : 25 Mo)");

@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_CR_Facade_2
+  m_Name: M_CR_Paves_Plateau
   m_Shader: {fileID: 4800000, guid: 51cc6023ede84b4488d4c31b9633fcbb, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -24,8 +24,8 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 2800000, guid: 5dff53aa468f9414f99ae6e6a9a28f92, type: 3}
-        m_Scale: {x: 1, y: 1}
+        m_Texture: {fileID: 2800000, guid: b7d92e43ef1533d41b4bbd146b01ec89, type: 3}
+        m_Scale: {x: 9, y: 22}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
