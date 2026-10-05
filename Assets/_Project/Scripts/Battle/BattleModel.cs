@@ -190,7 +190,18 @@ namespace StreetMythos.Battle
 
         // ---------- Tour ennemi ----------
 
+        // Tour ennemi d'un coup, réactions fournies au fil de l'eau (tests, simulations)
         public void RunEnemyTurn(IReactionSource reactions)
+        {
+            var turn = StartEnemyTurn();
+            while (turn.NextHit(out var hit))
+                turn.Resolve(reactions?.React(hit.Attacker, hit.Target, hit.HitIndex) ?? Reaction.None);
+            turn.Finish();
+        }
+
+        // Tour ennemi pas à pas : la présentation attend l'instant d'impact de chaque coup
+        // et la réaction du joueur avant d'appeler Resolve
+        public EnemyTurn StartEnemyTurn()
         {
             var actor = Current;
             if (actor == null || actor.Team != Team.Enemies) throw new InvalidOperationException("Ce n'est pas le tour d'un ennemi");
@@ -203,28 +214,75 @@ namespace StreetMythos.Battle
             var taunting = heroes.Where(h => h.TauntTurns > 0).ToList();
             var targets = move.TargetsAll ? heroes
                         : new List<BattleUnit> { taunting.Count > 0 ? taunting[0] : heroes[_rng.Range(0, heroes.Count)] };
+            return new EnemyTurn(this, actor, move, targets);
+        }
 
-            foreach (var target in targets)
-                for (int h = 0; h < move.Hits && target.IsAlive && actor.IsAlive; h++)
+        public sealed class EnemyTurn
+        {
+            readonly BattleModel _m;
+            readonly List<BattleUnit> _targets;
+            int _targetIndex, _hitIndex;
+            HitIncoming _pending;
+            bool _finished;
+
+            public readonly BattleUnit Actor;
+            public readonly EnemyMove Move;
+            public IReadOnlyList<BattleUnit> Targets => _targets;
+
+            internal EnemyTurn(BattleModel m, BattleUnit actor, EnemyMove move, List<BattleUnit> targets)
+            {
+                _m = m; Actor = actor; Move = move; _targets = targets;
+            }
+
+            // Prochain coup à jouer ; faux quand l'attaque est terminée
+            public bool NextHit(out HitIncoming hit)
+            {
+                if (_pending != null) throw new InvalidOperationException("Le coup précédent n'a pas été résolu");
+                while (_targetIndex < _targets.Count)
                 {
-                    Emit(new HitIncoming { Attacker = actor, Target = target, HitIndex = h, HitCount = move.Hits });
-                    var reaction = reactions?.React(actor, target, h) ?? Reaction.None;
-                    switch (reaction)
+                    var target = _targets[_targetIndex];
+                    if (_hitIndex < Move.Hits && target.IsAlive && Actor.IsAlive)
                     {
-                        case Reaction.Dodge:
-                            Emit(new Damaged { Source = actor, Target = target, Amount = 0, Reaction = reaction });
-                            break;
-                        case Reaction.Parry:
-                            Emit(new Damaged { Source = actor, Target = target, Amount = 0, Reaction = reaction });
-                            GainFlow(target, Rules.FlowOnParry);
-                            DealDamage(target, actor, Rules.ParryCounterPower, Reaction.None); // contre-attaque
-                            break;
-                        default:
-                            DealDamage(actor, target, move.Power, Reaction.None);
-                            break;
+                        _pending = hit = new HitIncoming { Attacker = Actor, Target = target, HitIndex = _hitIndex, HitCount = Move.Hits };
+                        _m.Emit(hit);
+                        return true;
                     }
+                    _targetIndex++;
+                    _hitIndex = 0;
                 }
-            EndTurn(actor, move.Delay);
+                hit = null;
+                return false;
+            }
+
+            public void Resolve(Reaction reaction)
+            {
+                if (_pending == null) throw new InvalidOperationException("Aucun coup en attente");
+                var target = _pending.Target;
+                switch (reaction)
+                {
+                    case Reaction.Dodge:
+                        _m.Emit(new Damaged { Source = Actor, Target = target, Amount = 0, Reaction = reaction });
+                        break;
+                    case Reaction.Parry:
+                        _m.Emit(new Damaged { Source = Actor, Target = target, Amount = 0, Reaction = reaction });
+                        _m.GainFlow(target, Rules.FlowOnParry);
+                        _m.DealDamage(target, Actor, Rules.ParryCounterPower, Reaction.None); // contre-attaque
+                        break;
+                    default:
+                        _m.DealDamage(Actor, target, Move.Power, Reaction.None);
+                        break;
+                }
+                _pending = null;
+                _hitIndex++;
+            }
+
+            public void Finish()
+            {
+                if (_finished) return;
+                if (_pending != null) throw new InvalidOperationException("Un coup n'a pas été résolu");
+                _finished = true;
+                _m.EndTurn(Actor, Move.Delay);
+            }
         }
 
         // ---------- Règles internes ----------

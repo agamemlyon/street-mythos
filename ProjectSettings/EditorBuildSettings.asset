@@ -11,5 +11,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Project/Scenes/J0_Test.unity
     guid: a84f651062730a64bb5cbf3704f4c85e
+  - enabled: 1
+    path: Assets/_Project/Scenes/Arena_Q1.unity
+    guid: cf459aa6fc5173e4f8d345928269996f
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
