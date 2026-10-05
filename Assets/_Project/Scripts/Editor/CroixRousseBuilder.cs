@@ -144,7 +144,8 @@ namespace StreetMythos.Editor
 
             EditorSceneManager.SaveScene(scene, ScenePath);
 
-            var scenes = EditorBuildSettings.scenes.Where(s => s.path != ScenePath).ToList();
+            // La scène de test du J0 sort du build : elle ne sert plus au joueur et pèse sur le démarrage
+            var scenes = EditorBuildSettings.scenes.Where(s => s.path != ScenePath && !s.path.EndsWith("J0_Test.unity")).ToList();
             scenes.Insert(Mathf.Min(1, scenes.Count), new EditorBuildSettingsScene(ScenePath, true));
             EditorBuildSettings.scenes = scenes.ToArray();
             ArenaBuilder.SetBootTarget("Q1_CroixRousse");

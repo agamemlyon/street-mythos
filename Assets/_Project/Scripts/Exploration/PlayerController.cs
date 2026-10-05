@@ -14,7 +14,7 @@ namespace StreetMythos.Exploration
         CharacterController _cc;
         InputAction _move, _run, _interact;
         Animation _anim;
-        float _vy;
+        float _vy, _stepTimer;
 
         public InputAction Interact => _interact;
 
@@ -62,6 +62,9 @@ namespace StreetMythos.Exploration
                 transform.rotation = Quaternion.Slerp(transform.rotation, target, TurnSpeed * Time.deltaTime);
                 if (_anim != null && !_anim.isPlaying) _anim.Play();
                 if (_anim != null && _anim.clip != null) _anim[_anim.clip.name].speed = speed / WalkSpeed;
+                // Bruits de pas sur les pavés, plus rapprochés en courant
+                _stepTimer -= Time.deltaTime;
+                if (_cc.isGrounded && _stepTimer <= 0) { StreetMythos.Core.AudioManager.Play("pas", 0.5f); _stepTimer = speed > WalkSpeed ? 0.3f : 0.45f; }
             }
             else if (_anim != null && _anim.isPlaying)
             {

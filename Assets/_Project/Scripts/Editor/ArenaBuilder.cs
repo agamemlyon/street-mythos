@@ -19,6 +19,7 @@ namespace StreetMythos.Editor
         public static void Build()
         {
             InkBuild.CompileAll();
+            AnimationExtractor.ExtractAll();
             var heroes = new[]
             {
                 MakeHeroPrefab("hero_yanis_walk", "Hero_Yanis", 1.75f),
@@ -190,6 +191,7 @@ namespace StreetMythos.Editor
             inst.name = prefabName;
             inst.transform.rotation = Quaternion.Euler(0, yaw, 0);
             ToonConverter.ConvertInstance(inst);
+            AnimationExtractor.AddClips(inst, glb.Replace("hero_", "").Replace("enemy_", "").Replace("_walk", ""));
             var b = inst.GetComponentsInChildren<Renderer>().Select(r => r.bounds).Aggregate((a, c) => { a.Encapsulate(c); return a; });
             inst.transform.localScale *= height / b.size.y;
             // Racine neutre : la taille et le pivot au sol vivent sur l'enfant

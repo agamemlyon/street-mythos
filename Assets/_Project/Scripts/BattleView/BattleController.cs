@@ -68,6 +68,7 @@ namespace StreetMythos.BattleView
             _input = new ReactionInput();
             _lines = new VanneLines(VannesInk);
             EnsureEventSystem();
+            StreetMythos.Core.AudioManager.Music("combat");
             StartCoroutine(Run());
         }
 
@@ -198,9 +199,9 @@ namespace StreetMythos.BattleView
 
                 switch (_model.Outcome)
                 {
-                    case BattleOutcome.Victory: _hud.ShowBanner("Victoire !" + ApplyRewards()); break;
+                    case BattleOutcome.Victory: _hud.ShowBanner("Victoire !" + ApplyRewards()); StreetMythos.Core.AudioManager.Music(null); StreetMythos.Core.AudioManager.Play("victoire"); break;
                     case BattleOutcome.Fled: _hud.ShowBanner("Fuite réussie"); break;
-                    default: _hud.ShowBanner("K.-O. … on remet ça"); break;
+                    default: _hud.ShowBanner("K.-O. … on remet ça"); StreetMythos.Core.AudioManager.Play("defaite"); break;
                 }
                 yield return new WaitForSecondsRealtime(2.5f);
                 // Défaite : le combat recommence à l'identique, sans pénalité (SPEC § 4.3)
@@ -222,8 +223,8 @@ namespace StreetMythos.BattleView
             // L'élan est joué avant d'appliquer l'action, pour que les chiffres tombent à l'impact
             var cmd = _pendingCommand;
             if (_lungeTarget != null && _views.TryGetValue(_lungeTarget, out var tv))
-                yield return _views[actor].Lunge(tv.transform.position);
-            cmd();
+                yield return _views[actor].Lunge(tv.transform.position, onImpact: cmd);
+            else cmd();
             _lungeTarget = null;
             while (Time.unscaledTime < _holdUntil) yield return null;
         }
@@ -333,6 +334,7 @@ namespace StreetMythos.BattleView
             {
                 // Annonce du coup, puis impact à heure fixe : la fenêtre est jugée sur l'horodatage des entrées
                 _hud.ShowHint($"{turn.Move.Name} sur {hit.Target.Def.Name} ! Espace : esquive · F : parade");
+                StreetMythos.Core.AudioManager.Play("annonce", 0.6f);
                 _input.Arm();
                 double impact = Time.realtimeSinceStartupAsDouble + TelegraphTime;
                 if (hit.HitIndex == 0) StartCoroutine(attacker.Lunge(_views[hit.Target].transform.position, TelegraphTime * 0.9f));
@@ -365,21 +367,23 @@ namespace StreetMythos.BattleView
             switch (e)
             {
                 case Damaged d when _views.TryGetValue(d.Target, out var v):
-                    if (d.Reaction == Reaction.Dodge) { _hud.Float(v.Head, "Esquive !", "good", this); StartCoroutine(v.Dodge()); }
-                    else if (d.Reaction == Reaction.Parry) _hud.Float(v.Head, "Parade !", "good", this);
-                    else { _hud.Float(v.Head, d.Amount.ToString(), d.Critical ? "crit" : null, this); StartCoroutine(v.Recoil()); }
+                    if (d.Reaction == Reaction.Dodge) { _hud.Float(v.Head, "Esquive !", "good", this); StartCoroutine(v.Dodge()); StreetMythos.Core.AudioManager.Play("esquive"); }
+                    else if (d.Reaction == Reaction.Parry) { _hud.Float(v.Head, "Parade !", "good", this); StartCoroutine(v.Parry()); StreetMythos.Core.AudioManager.Play("parade"); }
+                    else { _hud.Float(v.Head, d.Amount.ToString(), d.Critical ? "crit" : null, this); StartCoroutine(v.Recoil()); StreetMythos.Core.AudioManager.Play(d.Critical ? "coup_critique" : "coup"); }
                     break;
                 case MoralChanged m when _views.TryGetValue(m.Target, out var v):
                     if (m.Vanne.HasValue && m.Source != null && _views.TryGetValue(m.Source, out var sv))
                     {
                         // La vanne du héros, puis la réplique de l'ennemi, puis l'effet sur son Moral
                         string said = _lines?.Vanne(m.Source, m.Vanne.Value);
+                        string sound = m.Result == "efficace" ? "vanne_efficace" : m.Result == "ratée" ? "vanne_ratee" : "vanne_neutre";
                         if (!string.IsNullOrEmpty(said)) _hud.Float(sv.Head + Vector3.up * 0.4f, said, "speech", this, 2.6f);
                         StartCoroutine(Later(1.2f, () =>
                         {
                             string reply = _lines?.Reply(m.Target, m.Result);
                             if (!string.IsNullOrEmpty(reply)) _hud.Float(v.Head + Vector3.up * 0.4f, reply, "speech enemy", this, 2.4f);
                             _hud.Float(v.Head, $"Moral {m.Delta} · {m.Result}", "moral", this, 1.4f);
+                            StreetMythos.Core.AudioManager.Play(sound);
                         }));
                         _holdUntil = Time.unscaledTime + 3.4f;
                     }
@@ -393,6 +397,7 @@ namespace StreetMythos.BattleView
                     break;
                 case Knocked k when _views.TryGetValue(k.Target, out var v):
                     StartCoroutine(v.Fall());
+                    StreetMythos.Core.AudioManager.Play("ko");
                     break;
                 case TurnSkipped t when _views.TryGetValue(t.Unit, out var v):
                     _hud.Float(v.Head, "Tour perdu", "moral", this);
