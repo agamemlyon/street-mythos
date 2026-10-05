@@ -1,6 +1,6 @@
 {
     "name": "StreetMythos.Tests.EditMode",
-    "references": ["StreetMythos.Core", "StreetMythos.Battle", "UnityEngine.TestRunner", "UnityEditor.TestRunner"],
+    "references": ["StreetMythos.Core", "StreetMythos.Battle", "StreetMythos.Data", "UnityEngine.TestRunner", "UnityEditor.TestRunner"],
     "includePlatforms": ["Editor"],
     "overrideReferences": true,
     "precompiledReferences": ["nunit.framework.dll"],

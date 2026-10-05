@@ -1,0 +1,9 @@
+{
+  "encounters": [
+    { "id": "q1_tuto_pigeons", "name": "Les pigeons de la place", "enemies": ["pigeon_possede", "pigeon_possede", "pigeon_possede"], "tutorial": true },
+    { "id": "q1_brume_montee", "name": "La brume de la montée", "enemies": ["brumeux", "brumeux"] },
+    { "id": "q1_lion_place", "name": "Le lion de la place", "enemies": ["lion_de_pierre", "brumeux"] },
+    { "id": "q1_elite_ficelle", "name": "La Ficelle fantôme", "enemies": ["controleur_fantome", "controleur_fantome"], "elite": true },
+    { "id": "q1_boss_gros_caillou", "name": "Le Gros Caillou", "enemies": ["gros_caillou"], "boss": true }
+  ]
+}

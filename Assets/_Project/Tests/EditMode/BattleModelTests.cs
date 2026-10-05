@@ -334,6 +334,70 @@ namespace StreetMythos.Tests.EditMode
             Assert.AreEqual(200, U(m, "y").Hp, "pas au-delà du max");
         }
 
+        [Test]
+        public void CoursierDeNuitSpeedsUpTheTeam()
+        {
+            var coursier = new SkillDef { Id = "coursier", FlowCost = 0, Target = TargetKind.AllAllies, TeamSpdBuffPercent = 25, BuffTurns = 3 };
+            var m = new BattleModel(new[] { Hero("yanis", spd: 300), Hero("b", spd: 100) }, new[] { Enemy("e", spd: 1, hp: 9999) }, 3);
+            m.NextActor();
+            m.UseSkill(coursier, null);
+            Assert.AreEqual(125, U(m, "b").Speed);
+        }
+
+        [Test]
+        public void PepTalkGivesTwoFlowToAlly()
+        {
+            var pep = new SkillDef { Id = "pep", FlowCost = 0, Target = TargetKind.SingleAlly, HealPercent = 10, FlowGrant = 2 };
+            var m = new BattleModel(new[] { Hero("ines", spd: 300), Hero("b", spd: 100) }, new[] { Enemy("e", spd: 1, hp: 9999) }, 3);
+            m.NextActor();
+            m.UseSkill(pep, U(m, "b"));
+            Assert.AreEqual(2, U(m, "b").Flow);
+        }
+
+        [Test]
+        public void DerapageHitsEveryEnemy()
+        {
+            var derapage = new SkillDef { Id = "derapage", FlowCost = 0, Target = TargetKind.AllEnemies, Power = 70 };
+            var m = new BattleModel(new[] { Hero("yanis", spd: 300) }, new[] { Enemy("a", spd: 1, hp: 999), Enemy("b", spd: 1, hp: 999), Enemy("c", spd: 1, hp: 999) }, 3);
+            m.NextActor();
+            m.UseSkill(derapage, null);
+            Assert.IsTrue(m.Enemies.All(e => e.Hp < 999));
+        }
+
+        [Test]
+        public void EnragedWearsOffAfterTwoEnemyTurns()
+        {
+            var m = new BattleModel(new[] { Hero("h", spd: 100) }, new[] { Enemy("e", spd: 100, hp: 9999, resist: VanneType.Mytho) }, 3);
+            m.NextActor();
+            m.Tchatche(U(m, "e"), VanneType.Mytho);
+            var r = new FixedReaction(Reaction.Dodge);
+            int enemyTurns = 0;
+            while (enemyTurns < 2)
+            {
+                var a = m.NextActor();
+                if (a.Team == Team.Enemies) { m.RunEnemyTurn(r); enemyTurns++; } else m.Defend();
+            }
+            Assert.AreEqual(0, U(m, "e").EnragedTurns);
+        }
+
+        [Test]
+        public void DestabilizedTargetTakesMoreDamage()
+        {
+            var e = new BattleUnit(Enemy("e"), 0) { DestabilizedTurns = 1 };
+            Assert.IsTrue(e.IsDestabilized);
+            Assert.AreEqual(150, BattleModel.ComputeDamage(100, 100, 0, 1f, false, e.IsDestabilized, false));
+        }
+
+        [Test]
+        public void CannotFleeFromElite()
+        {
+            var elite = Enemy("controleur");
+            elite.IsElite = true;
+            var m = new BattleModel(new[] { Hero("h", spd: 300) }, new[] { elite }, 1);
+            m.NextActor();
+            Assert.IsFalse(m.CanFlee);
+        }
+
         // ---------- Fuite ----------
 
         [Test]

@@ -1,0 +1,18 @@
+{
+  "skills": [
+    { "id": "livraison_express", "name": "Livraison express", "delay": 80, "flowCost": 2, "target": "SingleEnemy", "power": 60, "hits": 2 },
+    { "id": "derapage", "name": "Dérapage", "delay": 130, "flowCost": 3, "target": "AllEnemies", "power": 70 },
+    { "id": "coursier_de_nuit", "name": "Coursier de nuit", "delay": 120, "flowCost": 3, "target": "AllAllies", "teamSpdBuffPercent": 25, "buffTurns": 3 },
+    { "id": "express_legendaire", "name": "Express légendaire", "delay": 150, "flowCost": 5, "target": "SingleEnemy", "power": 260 },
+
+    { "id": "punchline", "name": "Punchline", "delay": 120, "flowCost": 2, "target": "SingleEnemy", "power": 80, "moralDamage": 20 },
+    { "id": "objection", "name": "Objection !", "delay": 120, "flowCost": 3, "target": "SingleEnemy", "pushBack": 3 },
+    { "id": "pep_talk", "name": "Pep talk", "delay": 120, "flowCost": 2, "target": "SingleAlly", "healPercent": 15, "flowGrant": 2 },
+    { "id": "plaidoirie", "name": "Plaidoirie", "delay": 150, "flowCost": 5, "target": "AllEnemies", "moralDamage": 30 },
+
+    { "id": "garde_du_boxeur", "name": "Garde du boxeur", "delay": 120, "flowCost": 2, "target": "Self", "tauntTurns": 2, "defendTurns": 2 },
+    { "id": "uppercut", "name": "Uppercut", "delay": 130, "flowCost": 3, "target": "SingleEnemy", "power": 110, "stunIfMoralBelow": 50 },
+    { "id": "sauce_blanche", "name": "Sauce blanche", "delay": 140, "flowCost": 4, "target": "AllAllies", "healPercent": 30 },
+    { "id": "crochet_du_droit", "name": "Crochet du droit", "delay": 150, "flowCost": 5, "target": "SingleEnemy", "power": 300 }
+  ]
+}
