@@ -1,0 +1,49 @@
+{
+  "enemies": [
+    {
+      "id": "pigeon_possede", "name": "Pigeon possédé",
+      "hp": 60, "atk": 30, "def": 5, "spd": 120,
+      "weakness": "Chambrage", "resistance": "Clash",
+      "xp": 8, "balles": 5,
+      "moves": [ { "id": "coup_de_bec", "name": "Coup de bec", "delay": 90, "power": 80, "hits": 1 } ]
+    },
+    {
+      "id": "brumeux", "name": "Brumeux",
+      "hp": 110, "atk": 40, "def": 15, "spd": 95,
+      "weakness": "Mytho", "resistance": "Chambrage",
+      "xp": 15, "balles": 10,
+      "moves": [
+        { "id": "souffle_froid", "name": "Souffle froid", "delay": 100, "power": 100, "hits": 1 },
+        { "id": "rafale", "name": "Rafale de brume", "delay": 120, "power": 50, "hits": 2 }
+      ]
+    },
+    {
+      "id": "lion_de_pierre", "name": "Lion de pierre",
+      "hp": 180, "atk": 50, "def": 45, "spd": 70,
+      "weakness": "Clash", "resistance": "Mytho",
+      "xp": 25, "balles": 15,
+      "moves": [ { "id": "coup_de_patte", "name": "Coup de patte", "delay": 110, "power": 120, "hits": 1 } ]
+    },
+    {
+      "id": "controleur_fantome", "name": "Contrôleur fantôme", "elite": true,
+      "hp": 260, "atk": 55, "def": 30, "spd": 105,
+      "weakness": "Mytho", "resistance": "Clash",
+      "xp": 60, "balles": 40,
+      "moves": [
+        { "id": "titre_de_transport", "name": "Titre de transport !", "delay": 100, "power": 90, "hits": 1 },
+        { "id": "amende_majoree", "name": "Amende majorée", "delay": 130, "power": 45, "hits": 3 }
+      ]
+    },
+    {
+      "id": "gros_caillou", "name": "Gros Caillou", "boss": true,
+      "hp": 900, "atk": 65, "def": 60, "spd": 60,
+      "weakness": "Chambrage", "resistance": "Clash",
+      "xp": 200, "balles": 120,
+      "moves": [
+        { "id": "eboulement", "name": "Éboulement", "delay": 140, "power": 80, "hits": 1, "targetsAll": true },
+        { "id": "pave_vole", "name": "Pavé volé", "delay": 100, "power": 130, "hits": 1 },
+        { "id": "pluie_de_paves", "name": "Pluie de pavés", "delay": 150, "power": 40, "hits": 4 }
+      ]
+    }
+  ]
+}

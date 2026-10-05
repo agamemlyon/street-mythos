@@ -1,0 +1,22 @@
+{
+  "heroes": [
+    {
+      "id": "yanis", "name": "Yanis",
+      "hp": 220, "atk": 55, "def": 20, "spd": 130,
+      "skills": ["livraison_express", "derapage", "coursier_de_nuit", "express_legendaire"],
+      "skillLevels": [1, 1, 3, 6]
+    },
+    {
+      "id": "ines", "name": "Inès", "ines": true,
+      "hp": 200, "atk": 45, "def": 20, "spd": 110,
+      "skills": ["punchline", "objection", "pep_talk", "plaidoirie"],
+      "skillLevels": [1, 1, 3, 6]
+    },
+    {
+      "id": "momo", "name": "Momo",
+      "hp": 300, "atk": 60, "def": 40, "spd": 85,
+      "skills": ["garde_du_boxeur", "uppercut", "sauce_blanche", "crochet_du_droit"],
+      "skillLevels": [1, 1, 3, 6]
+    }
+  ]
+}

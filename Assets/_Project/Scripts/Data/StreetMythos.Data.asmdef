@@ -1,0 +1,6 @@
+{
+    "name": "StreetMythos.Data",
+    "rootNamespace": "StreetMythos.Data",
+    "references": ["StreetMythos.Battle"],
+    "autoReferenced": true
+}
