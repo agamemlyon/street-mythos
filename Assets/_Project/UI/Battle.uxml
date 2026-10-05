@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <Style src="Battle.uss" />
+    <ui:VisualElement name="root" class="root" picking-mode="Ignore">
+        <ui:VisualElement name="timeline" class="timeline">
+            <ui:Label text="Tours" class="timeline-label" />
+        </ui:VisualElement>
+        <ui:Label name="hint" class="hint hidden" text="Espace : esquive · F : parade" />
+        <ui:Label name="banner" class="banner hidden" />
+        <ui:VisualElement name="floats" picking-mode="Ignore" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0;" />
+        <ui:VisualElement name="bottom" class="bottom" picking-mode="Ignore">
+            <ui:VisualElement name="party" class="panel party" />
+            <ui:VisualElement name="menu" class="panel menu hidden" />
+            <ui:VisualElement name="foes" class="panel foes" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

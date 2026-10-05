@@ -22,11 +22,13 @@ Référence pour tout visuel du jeu : prompts Higgsfield, modèles VRoid, shader
 
 ## Couleurs signature
 
+Alignées le 5 octobre 2026 sur les fiches Higgsfield retenues (version street A), qui font référence.
+
 | Personnage | Couleur | Détail repère |
 |---|---|---|
-| Yanis | Orange coucher de soleil | Coupe-vent à bandes réfléchissantes, sac de livraison bleu canard |
-| Inès | Lilas | Blazer gris sur sweat lilas, lunettes rondes dorées |
-| Momo | Blanc et rouge | Tablier de cuisine, bandes de boxe rouges |
+| Yanis | Noir et orange coucher de soleil | Survêt noir à bandes orange, casquette noire au lion, sacoche, mitaines, sac de livraison bleu canard (accessoire séparé) |
+| Inès | Lilas | Survêt lilas à bandes blanches, casquette crème au lion, lunettes rondes dorées, créoles, tresses, petit sac crème |
+| Momo | Blanc et rouge | Polo blanc, tablier de cuisine, bandes de boxe rouges, casquette noire à l’envers, jogging gris, claquettes-chaussettes |
 | Guignol | Marron et rouge | Veste marron, nœud papillon rouge, bas du corps en brume |
 
 ## Module de prompt (à coller tel quel)

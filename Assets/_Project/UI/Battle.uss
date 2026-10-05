@@ -1,0 +1,41 @@
+/* Interface de combat : palette de nuit de la bible de style */
+.root { flex-grow: 1; justify-content: space-between; -unity-font-style: bold; color: #FFFFFF; }
+
+.timeline { flex-direction: row; align-self: center; margin-top: 16px; padding: 6px 10px; background-color: rgba(27, 27, 58, 0.85); border-radius: 10px; border-width: 2px; border-color: #3D2C6B; }
+.timeline-label { color: #8FA3C7; font-size: 14px; margin-right: 8px; -unity-text-align: middle-left; }
+.tl-slot { width: 64px; height: 40px; margin: 0 3px; border-radius: 6px; -unity-text-align: middle-center; font-size: 13px; border-width: 2px; }
+.tl-hero { background-color: #FFB35C; color: #1B1B3A; border-color: #FFB35C; }
+.tl-enemy { background-color: #3D2C6B; color: #FFFFFF; border-color: #FF4F9A; }
+.tl-current { border-color: #3DFFB0; border-width: 3px; }
+
+.bottom { flex-direction: row; justify-content: space-between; align-items: flex-end; margin: 0 16px 16px 16px; }
+.panel { background-color: rgba(27, 27, 58, 0.9); border-radius: 10px; border-width: 2px; border-color: #3D2C6B; padding: 10px 12px; }
+.party, .foes { min-width: 300px; }
+
+.unit-row { margin: 3px 0; }
+.unit-row.active .unit-name { color: #3DFFB0; }
+.unit-row.down { opacity: 0.4; }
+.unit-name { font-size: 16px; }
+.bars { flex-direction: row; }
+.bar { height: 10px; margin: 2px 6px 2px 0; background-color: rgba(255, 255, 255, 0.12); border-radius: 4px; flex-grow: 1; }
+.bar-fill { height: 100%; border-radius: 4px; }
+.hp .bar-fill { background-color: #3DFFB0; }
+.moral .bar-fill { background-color: #FF4F9A; }
+.flow .bar-fill { background-color: #4FD8FF; }
+.bar-text { font-size: 12px; color: #8FA3C7; min-width: 70px; }
+
+.menu { min-width: 260px; }
+.menu-title { color: #FFB35C; font-size: 15px; margin-bottom: 6px; }
+.menu Button { height: 34px; margin: 3px 0; font-size: 15px; color: #1B1B3A; background-color: #FFB35C; border-radius: 6px; border-width: 0; -unity-font-style: bold; }
+.menu Button:hover { background-color: #3DFFB0; }
+.menu Button:disabled { background-color: #5A5470; color: #8FA3C7; }
+.menu .back { background-color: #3D2C6B; color: #FFFFFF; }
+
+.hint { position: absolute; top: 80px; align-self: center; font-size: 26px; color: #FFFFFF; background-color: rgba(255, 79, 154, 0.85); padding: 8px 18px; border-radius: 10px; }
+.banner { position: absolute; top: 40%; align-self: center; font-size: 56px; color: #FFB35C; -unity-text-outline-width: 2px; -unity-text-outline-color: #1B1B3A; }
+.float { position: absolute; font-size: 28px; color: #FFFFFF; -unity-text-outline-width: 2px; -unity-text-outline-color: #1B1B3A; }
+.float.crit { color: #FFB35C; font-size: 36px; }
+.float.moral { color: #FF4F9A; }
+.float.heal { color: #3DFFB0; }
+.float.good { color: #4FD8FF; }
+.hidden { display: none; }
