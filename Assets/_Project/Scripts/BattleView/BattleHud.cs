@@ -107,7 +107,7 @@ namespace StreetMythos.BattleView
             _menu.Add(t);
             foreach (var o in options)
             {
-                var b = new Button(() => o.OnPick?.Invoke()) { text = o.Label };
+                var b = new Button(() => { StreetMythos.Core.AudioManager.Play(o.IsBack ? "retour" : "menu", 0.7f); o.OnPick?.Invoke(); }) { text = o.Label };
                 b.SetEnabled(o.Enabled);
                 if (o.IsBack) b.AddToClassList("back");
                 _menu.Add(b);

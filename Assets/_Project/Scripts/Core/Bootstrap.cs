@@ -19,6 +19,8 @@ namespace StreetMythos.Core
 
         void Start()
         {
+            // Debug : ?combat=<rencontre> ouvre directement l'arène
+            if (Application.absoluteURL.Contains("combat=")) firstScene = "Arena_Q1";
             if (Application.CanStreamedLevelBeLoaded(firstScene))
             {
                 SceneManager.LoadScene(firstScene);

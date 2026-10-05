@@ -549,6 +549,157 @@
    "path": "Assets/StreamingAssets/intro.mp4",
    "size_mb": 12,
    "notes": "lue par URL, hors budget de démarrage"
+  },
+  {
+   "id": "anim_yanis_stance",
+   "type": "animation_clip",
+   "source": "higgsfield",
+   "model": "3d_rigging + clip de la bibliothèque",
+   "job_id": "f2df5172-89af-47eb-82bc-1f9472372161",
+   "path": "Assets/_Project/Art/Animations/yanis_stance.anim",
+   "cost_credits": 8,
+   "license": "Higgsfield, usage commercial à vérifier avant publication",
+   "notes": "GLB source hors du dépôt, régénérable par le job"
+  },
+  {
+   "id": "anim_yanis_attaque",
+   "type": "animation_clip",
+   "source": "higgsfield",
+   "model": "3d_rigging + clip de la bibliothèque",
+   "job_id": "533abbb6-961a-4bed-9baf-f8228906a178",
+   "path": "Assets/_Project/Art/Animations/yanis_attaque.anim",
+   "cost_credits": 8,
+   "license": "Higgsfield, usage commercial à vérifier avant publication",
+   "notes": "GLB source hors du dépôt, régénérable par le job"
+  },
+  {
+   "id": "anim_yanis_esquive",
+   "type": "animation_clip",
+   "source": "higgsfield",
+   "model": "3d_rigging + clip de la bibliothèque",
+   "job_id": "5a5e4418-2a20-419c-9ff0-c5c270ba8d99",
+   "path": "Assets/_Project/Art/Animations/yanis_esquive.anim",
+   "cost_credits": 8,
+   "license": "Higgsfield, usage commercial à vérifier avant publication",
+   "notes": "GLB source hors du dépôt, régénérable par le job"
+  },
+  {
+   "id": "anim_yanis_parade",
+   "type": "animation_clip",
+   "source": "higgsfield",
+   "model": "3d_rigging + clip de la bibliothèque",
+   "job_id": "9aa69901-c30b-4365-baf9-fb039897ee87",
+   "path": "Assets/_Project/Art/Animations/yanis_parade.anim",
+   "cost_credits": 8,
+   "license": "Higgsfield, usage commercial à vérifier avant publication",
+   "notes": "GLB source hors du dépôt, régénérable par le job"
+  },
+  {
+   "id": "anim_ines_stance",
+   "type": "animation_clip",
+   "source": "higgsfield",
+   "model": "3d_rigging + clip de la bibliothèque",
+   "job_id": "e480ac53-cb6a-4e08-9ee9-a6af79147039",
+   "path": "Assets/_Project/Art/Animations/ines_stance.anim",
+   "cost_credits": 8,
+   "license": "Higgsfield, usage commercial à vérifier avant publication",
+   "notes": "GLB source hors du dépôt, régénérable par le job"
+  },
+  {
+   "id": "anim_ines_attaque",
+   "type": "animation_clip",
+   "source": "higgsfield",
+   "model": "3d_rigging + clip de la bibliothèque",
+   "job_id": "b2e95927-b3d9-4710-894e-86854a5d978c",
+   "path": "Assets/_Project/Art/Animations/ines_attaque.anim",
+   "cost_credits": 8,
+   "license": "Higgsfield, usage commercial à vérifier avant publication",
+   "notes": "GLB source hors du dépôt, régénérable par le job"
+  },
+  {
+   "id": "anim_ines_esquive",
+   "type": "animation_clip",
+   "source": "higgsfield",
+   "model": "3d_rigging + clip de la bibliothèque",
+   "job_id": "943ed7ca-955b-47eb-be81-43aacc2bc6fb",
+   "path": "Assets/_Project/Art/Animations/ines_esquive.anim",
+   "cost_credits": 8,
+   "license": "Higgsfield, usage commercial à vérifier avant publication",
+   "notes": "GLB source hors du dépôt, régénérable par le job"
+  },
+  {
+   "id": "anim_ines_parade",
+   "type": "animation_clip",
+   "source": "higgsfield",
+   "model": "3d_rigging + clip de la bibliothèque",
+   "job_id": "22e6eea1-e8d9-44f0-b8b7-cc1f7ea08c57",
+   "path": "Assets/_Project/Art/Animations/ines_parade.anim",
+   "cost_credits": 8,
+   "license": "Higgsfield, usage commercial à vérifier avant publication",
+   "notes": "GLB source hors du dépôt, régénérable par le job"
+  },
+  {
+   "id": "anim_momo_stance",
+   "type": "animation_clip",
+   "source": "higgsfield",
+   "model": "3d_rigging + clip de la bibliothèque",
+   "job_id": "f2eade63-b4bc-4d20-8e23-99ecbbc12dfe",
+   "path": "Assets/_Project/Art/Animations/momo_stance.anim",
+   "cost_credits": 8,
+   "license": "Higgsfield, usage commercial à vérifier avant publication",
+   "notes": "GLB source hors du dépôt, régénérable par le job"
+  },
+  {
+   "id": "anim_momo_attaque",
+   "type": "animation_clip",
+   "source": "higgsfield",
+   "model": "3d_rigging + clip de la bibliothèque",
+   "job_id": "93fc23fd-8448-4e75-8391-b69255ca94b6",
+   "path": "Assets/_Project/Art/Animations/momo_attaque.anim",
+   "cost_credits": 8,
+   "license": "Higgsfield, usage commercial à vérifier avant publication",
+   "notes": "GLB source hors du dépôt, régénérable par le job"
+  },
+  {
+   "id": "anim_momo_esquive",
+   "type": "animation_clip",
+   "source": "higgsfield",
+   "model": "3d_rigging + clip de la bibliothèque",
+   "job_id": "529d09fa-8d91-4e58-95a5-10df9fdfe630",
+   "path": "Assets/_Project/Art/Animations/momo_esquive.anim",
+   "cost_credits": 8,
+   "license": "Higgsfield, usage commercial à vérifier avant publication",
+   "notes": "GLB source hors du dépôt, régénérable par le job"
+  },
+  {
+   "id": "anim_momo_parade",
+   "type": "animation_clip",
+   "source": "higgsfield",
+   "model": "3d_rigging + clip de la bibliothèque",
+   "job_id": "8c770656-2e5a-4688-a8b0-9868513caa18",
+   "path": "Assets/_Project/Art/Animations/momo_parade.anim",
+   "cost_credits": 8,
+   "license": "Higgsfield, usage commercial à vérifier avant publication",
+   "notes": "GLB source hors du dépôt, régénérable par le job"
+  },
+  {
+   "id": "anim_controleur_attaque",
+   "type": "animation_clip",
+   "source": "higgsfield",
+   "model": "3d_rigging + clip de la bibliothèque",
+   "job_id": "b9da8bbe-6652-4d68-a1b1-c6abf841d781",
+   "path": "Assets/_Project/Art/Animations/controleur_attaque.anim",
+   "cost_credits": 8,
+   "license": "Higgsfield, usage commercial à vérifier avant publication",
+   "notes": "GLB source hors du dépôt, régénérable par le job"
+  },
+  {
+   "id": "audio_cc0",
+   "type": "audio",
+   "source": "kenney.nl et opengameart.org",
+   "license": "CC0",
+   "path": "Assets/_Project/Resources/Sons et Assets/StreamingAssets/music",
+   "notes": "détail dans docs/credits_audio.md"
   }
  ]
 }

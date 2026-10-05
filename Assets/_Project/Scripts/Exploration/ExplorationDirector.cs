@@ -35,6 +35,7 @@ namespace StreetMythos.Exploration
             if (!_sessionStarted) yield return TitleMenu(root);
             _sessionStarted = true;
 
+            AudioManager.Music("exploration");
             var p = GameProgress.Current;
             if (p.hasPosition && p.scene == SceneManager.GetActiveScene().name)
             {
@@ -46,7 +47,7 @@ namespace StreetMythos.Exploration
             OrbitCam.SetYaw(Player.transform.eulerAngles.y + 180f);
 
             // Scènes d'histoire déclenchées par la progression
-            if (!p.Has("intro_vue")) { p.Set("intro_vue"); yield return IntroVideo(); yield return Talk("rencontre_ines_momo"); }
+            if (!p.Has("intro_vue")) { p.Set("intro_vue"); AudioManager.Music(null); yield return IntroVideo(); AudioManager.Music("exploration"); yield return Talk("rencontre_ines_momo"); }
             else if (p.IsDefeated("zone_pigeons") && !p.Has("apres_pigeons")) { p.Set("apres_pigeons"); yield return Talk("apres_pigeons"); }
             else if (p.IsDefeated("zone_gros_caillou") && !p.Has("fin_j1")) { p.Set("fin_j1"); yield return Talk("fin_j1"); yield return Banner("À suivre…"); }
             GameProgress.Save();
