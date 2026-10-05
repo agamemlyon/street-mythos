@@ -526,6 +526,29 @@
    "budget": 40000,
    "cost_credits": 38,
    "notes": "animé par code (Golem)"
+  },
+  {
+   "id": "tex_q1_facades_paves",
+   "type": "texture",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job_ids": [
+    "dbd7cbaa-4ad9-4294-890c-42a936beff77",
+    "6d127ba9-b6bc-4ffd-9070-e8a4f016501a",
+    "43fdb28a-b1f4-46a6-a284-c4fb79e6ca6e",
+    "caf876bd-d93e-4ef3-aeb9-eb162fb69ee4"
+   ],
+   "path": "Assets/_Project/Art/Environments/Q1_CroixRousse/",
+   "cost_credits": 6,
+   "license": "Higgsfield, usage commercial à vérifier avant publication"
+  },
+  {
+   "id": "intro_web",
+   "type": "video",
+   "source": "higgsfield (intro v1 réencodée 720p)",
+   "path": "Assets/StreamingAssets/intro.mp4",
+   "size_mb": 12,
+   "notes": "lue par URL, hors budget de démarrage"
   }
  ]
 }
