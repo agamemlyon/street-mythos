@@ -18,6 +18,7 @@ namespace StreetMythos.Editor
         [MenuItem("Street Mythos/Générer l'arène du quartier 1")]
         public static void Build()
         {
+            InkBuild.CompileAll();
             var heroes = new[]
             {
                 MakeHeroPrefab("hero_yanis_walk", "Hero_Yanis", 1.75f),
@@ -114,6 +115,7 @@ namespace StreetMythos.Editor
             ctrl.EnemyPrefabs = enemies.Select(e => e.Item2).ToArray();
             ctrl.EnemyStyles = enemies.Select(e => e.Item3).ToArray();
             ctrl.BrumeMaterial = BrumeMat();
+            ctrl.VannesInk = AssetDatabase.LoadAssetAtPath<TextAsset>(Root + "/Dialogues/vannes.json");
 
             EditorSceneManager.SaveScene(scene, ArenaPath);
 

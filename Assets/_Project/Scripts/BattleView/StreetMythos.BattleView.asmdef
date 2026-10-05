@@ -1,6 +1,6 @@
 {
     "name": "StreetMythos.BattleView",
     "rootNamespace": "StreetMythos.BattleView",
-    "references": ["StreetMythos.Battle", "StreetMythos.Data", "StreetMythos.Core", "Unity.InputSystem", "UnityEngine.UI"],
+    "references": ["StreetMythos.Battle", "StreetMythos.Data", "StreetMythos.Core", "Unity.InputSystem", "UnityEngine.UI", "Ink-Libraries"],
     "autoReferenced": true
 }

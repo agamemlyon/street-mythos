@@ -29,6 +29,10 @@ namespace StreetMythos.BattleView
         public GameObject[] EnemyPrefabs = { };
         public EnemyMotion.Style[] EnemyStyles = { };
         public Material BrumeMaterial;
+        public TextAsset VannesInk;                    // Dialogues/vannes.json
+
+        VanneLines _lines;
+        float _holdUntil;                              // laisse le temps de lire une vanne
 
         [Header("Debug")]
         public bool AutoPlay;                // l'IA joue les deux camps (captures, tests)
@@ -54,6 +58,7 @@ namespace StreetMythos.BattleView
             if (m.Success) HeroLevel = int.Parse(m.Groups[1].Value);
             _data = new GameData(SkillsJson.text, HeroesJson.text, EnemiesJson.text, EncountersJson.text);
             _input = new ReactionInput();
+            _lines = new VanneLines(VannesInk);
             EnsureEventSystem();
             StartCoroutine(Run());
         }
@@ -211,6 +216,7 @@ namespace StreetMythos.BattleView
                 yield return _views[actor].Lunge(tv.transform.position);
             cmd();
             _lungeTarget = null;
+            while (Time.unscaledTime < _holdUntil) yield return null;
         }
 
         BattleUnit _lungeTarget;
@@ -312,6 +318,12 @@ namespace StreetMythos.BattleView
             yield return new WaitForSecondsRealtime(0.3f);
         }
 
+        IEnumerator Later(float delay, Action action)
+        {
+            yield return new WaitForSecondsRealtime(delay);
+            action();
+        }
+
         // ---------- Réaction visuelle aux événements du modèle ----------
 
         void OnEvent(BattleEvent e)
@@ -324,7 +336,20 @@ namespace StreetMythos.BattleView
                     else { _hud.Float(v.Head, d.Amount.ToString(), d.Critical ? "crit" : null, this); StartCoroutine(v.Recoil()); }
                     break;
                 case MoralChanged m when _views.TryGetValue(m.Target, out var v):
-                    _hud.Float(v.Head + Vector3.up * 0.3f, $"Moral {m.Delta} · {m.Result}", "moral", this);
+                    if (m.Vanne.HasValue && m.Source != null && _views.TryGetValue(m.Source, out var sv))
+                    {
+                        // La vanne du héros, puis la réplique de l'ennemi, puis l'effet sur son Moral
+                        string said = _lines?.Vanne(m.Source, m.Vanne.Value);
+                        if (!string.IsNullOrEmpty(said)) _hud.Float(sv.Head + Vector3.up * 0.4f, said, "speech", this, 2.6f);
+                        StartCoroutine(Later(1.2f, () =>
+                        {
+                            string reply = _lines?.Reply(m.Target, m.Result);
+                            if (!string.IsNullOrEmpty(reply)) _hud.Float(v.Head + Vector3.up * 0.4f, reply, "speech enemy", this, 2.4f);
+                            _hud.Float(v.Head, $"Moral {m.Delta} · {m.Result}", "moral", this, 1.4f);
+                        }));
+                        _holdUntil = Time.unscaledTime + 3.4f;
+                    }
+                    else _hud.Float(v.Head + Vector3.up * 0.3f, $"Moral {m.Delta}", "moral", this);
                     break;
                 case Destabilized s when _views.TryGetValue(s.Target, out var v):
                     _hud.Float(v.Head + Vector3.up * 0.6f, "Déstabilisé !", "crit", this);

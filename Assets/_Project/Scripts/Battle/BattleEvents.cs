@@ -18,7 +18,7 @@ namespace StreetMythos.Battle
     }
 
     public sealed class Healed : BattleEvent { public BattleUnit Target; public int Amount; }
-    public sealed class MoralChanged : BattleEvent { public BattleUnit Target; public int Delta; public VanneType? Vanne; public string Result; }
+    public sealed class MoralChanged : BattleEvent { public BattleUnit Source, Target; public int Delta; public VanneType? Vanne; public string Result; }
     public sealed class Destabilized : BattleEvent { public BattleUnit Target; }
     public sealed class Enraged : BattleEvent { public BattleUnit Target; }
     public sealed class Stunned : BattleEvent { public BattleUnit Target; }

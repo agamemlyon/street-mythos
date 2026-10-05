@@ -1,7 +1,7 @@
 {
     "name": "StreetMythos.Editor",
     "rootNamespace": "StreetMythos.Editor",
-    "references": ["StreetMythos.Core", "StreetMythos.Battle", "StreetMythos.BattleView", "Unity.RenderPipelines.Universal.Runtime", "Unity.RenderPipelines.Core.Runtime"],
+    "references": ["StreetMythos.Core", "StreetMythos.Battle", "StreetMythos.BattleView", "Ink-Libraries", "Unity.RenderPipelines.Universal.Runtime", "Unity.RenderPipelines.Core.Runtime"],
     "includePlatforms": ["Editor"],
     "autoReferenced": false
 }

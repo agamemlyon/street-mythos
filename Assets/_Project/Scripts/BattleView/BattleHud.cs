@@ -134,7 +134,7 @@ namespace StreetMythos.BattleView
         public void HideBanner() => _banner.AddToClassList("hidden");
 
         // Chiffre ou mot qui s'élève au-dessus d'un combattant
-        public void Float(Vector3 world, string text, string style, MonoBehaviour host)
+        public void Float(Vector3 world, string text, string style, MonoBehaviour host, float duration = 1f)
         {
             var cam = Camera.main;
             if (cam == null || _floats.panel == null) return;
@@ -145,13 +145,14 @@ namespace StreetMythos.BattleView
             Vector2 p = RuntimePanelUtils.CameraTransformWorldToPanel(_floats.panel, world, cam);
             label.style.left = p.x - 30;
             label.style.top = p.y;
-            host.StartCoroutine(Rise(label, p));
+            host.StartCoroutine(Rise(label, p, duration));
         }
 
-        static System.Collections.IEnumerator Rise(Label label, Vector2 p)
+        static System.Collections.IEnumerator Rise(Label label, Vector2 p, float duration)
         {
-            for (float t = 0; t < 1f; t += Time.unscaledDeltaTime)
+            for (float e = 0; e < duration; e += Time.unscaledDeltaTime)
             {
+                float t = e / duration;
                 label.style.top = p.y - 60f * t;
                 label.style.opacity = 1f - Mathf.Max(0, t - 0.6f) / 0.4f;
                 yield return null;
