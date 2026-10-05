@@ -17,6 +17,6 @@
 4. Équilibrage du boss (jugé facile en simulation), halos des lampadaires, 3 shaders URP non supportés.
 5. Mesure sur une machine à GPU intégré, puis bilan du J1 et validation de Samy.
 
-**Crédits Higgsfield** : J0 84,5 ; J1 environ 291 (héros 111,5, ennemis 173,5, textures 6). Solde : 5 107,5 crédits.
+**Crédits Higgsfield** : J0 84,5 ; J1 285 (héros 111,5, ennemis 167,5, textures 6). Solde : 5 107,5 crédits.
 
 **Règles** : chiffrer avant chaque lot Higgsfield (sauf autonomie accordée) ; demander avant toute installation ; 15 à 20 messages par fil ; pas de `Start-Process -Wait` avec Unity.
