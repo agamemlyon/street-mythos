@@ -198,7 +198,7 @@ namespace StreetMythos.BattleView
 
                 switch (_model.Outcome)
                 {
-                    case BattleOutcome.Victory: _hud.ShowBanner("Victoire !"); break;
+                    case BattleOutcome.Victory: _hud.ShowBanner("Victoire !" + ApplyRewards()); break;
                     case BattleOutcome.Fled: _hud.ShowBanner("Fuite réussie"); break;
                     default: _hud.ShowBanner("K.-O. … on remet ça"); break;
                 }
@@ -230,20 +230,25 @@ namespace StreetMythos.BattleView
 
         BattleUnit _lungeTarget;
 
+        // Gains de la victoire (combat lancé depuis la carte) ; renvoie le texte à afficher sous « Victoire ! »
+        string ApplyRewards()
+        {
+            if (!StreetMythos.Core.BattleRequest.Pending) return "";
+            var progress = StreetMythos.Core.GameProgress.Current;
+            var enemies = _data.Encounters[EncounterId].enemies;
+            int xp = enemies.Sum(e => _data.Enemies[e].xp), balles = enemies.Sum(e => _data.Enemies[e].balles);
+            int ups = progress.GainXp(xp);
+            progress.balles += balles;
+            return $"\n+{xp} XP · +{balles} balles" + (ups > 0 ? $"\nNiveau {progress.level} !" : "");
+        }
+
         // Retour à la carte : gains de la victoire, zone vaincue, sauvegarde automatique (SPEC § 4.7)
         void ReturnToExploration()
         {
             if (!StreetMythos.Core.BattleRequest.Pending) return;
             var progress = StreetMythos.Core.GameProgress.Current;
-            if (_model.Outcome == BattleOutcome.Victory)
-            {
-                var enemies = _data.Encounters[EncounterId].enemies;
-                int xp = enemies.Sum(e => _data.Enemies[e].xp), balles = enemies.Sum(e => _data.Enemies[e].balles);
-                int ups = progress.GainXp(xp);
-                progress.balles += balles;
-                if (!string.IsNullOrEmpty(StreetMythos.Core.BattleRequest.ZoneId)) progress.defeated.Add(StreetMythos.Core.BattleRequest.ZoneId);
-                Debug.Log($"[Combat] victoire : +{xp} XP, +{balles} balles, {ups} niveau(x)");
-            }
+            if (_model.Outcome == BattleOutcome.Victory && !string.IsNullOrEmpty(StreetMythos.Core.BattleRequest.ZoneId))
+                progress.defeated.Add(StreetMythos.Core.BattleRequest.ZoneId);
             string scene = StreetMythos.Core.BattleRequest.ReturnScene;
             StreetMythos.Core.BattleRequest.Clear();
             StreetMythos.Core.GameProgress.Save();

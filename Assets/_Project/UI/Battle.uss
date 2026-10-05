@@ -32,7 +32,7 @@
 .menu .back { background-color: #3D2C6B; color: #FFFFFF; }
 
 .hint { position: absolute; top: 80px; align-self: center; font-size: 26px; color: #FFFFFF; background-color: rgba(255, 79, 154, 0.85); padding: 8px 18px; border-radius: 10px; }
-.banner { position: absolute; top: 40%; align-self: center; font-size: 56px; color: #FFB35C; -unity-text-outline-width: 2px; -unity-text-outline-color: #1B1B3A; }
+.banner { position: absolute; top: 34%; align-self: center; -unity-text-align: middle-center; font-size: 56px; color: #FFB35C; -unity-text-outline-width: 2px; -unity-text-outline-color: #1B1B3A; }
 .float { position: absolute; font-size: 28px; color: #FFFFFF; -unity-text-outline-width: 2px; -unity-text-outline-color: #1B1B3A; }
 .float.crit { color: #FFB35C; font-size: 36px; }
 .float.moral { color: #FF4F9A; }
