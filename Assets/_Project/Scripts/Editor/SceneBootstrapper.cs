@@ -200,7 +200,9 @@ namespace StreetMythos.Editor
             if (b.size.y <= 0.0001f) return;
             go.transform.localScale *= height / b.size.y;
             b = go.GetComponentsInChildren<Renderer>().Select(r => r.bounds).Aggregate((a, c) => { a.Encapsulate(c); return a; });
-            go.transform.position += new Vector3(0, -b.min.y, 0);
+            // Pieds au sol, et centre du modèle sur le point visé (le pivot des GLB générés est décalé)
+            var target = go.transform.position;
+            go.transform.position += new Vector3(target.x - b.center.x, -b.min.y, target.z - b.center.z);
         }
 
         static Material MakeMaterial(Shader shader, string name, Color color)
