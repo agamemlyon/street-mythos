@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/_Project/Scenes/Boot.unity
     guid: c9522d4eda1249b46bfc23637175858b
   - enabled: 1
+    path: Assets/_Project/Scenes/Q1_CroixRousse.unity
+    guid: 6d14f16ab36e315488bfa7fcf4498185
+  - enabled: 1
     path: Assets/_Project/Scenes/J0_Test.unity
     guid: a84f651062730a64bb5cbf3704f4c85e
   - enabled: 1

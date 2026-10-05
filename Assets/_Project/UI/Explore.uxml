@@ -1,0 +1,21 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <Style src="Explore.uss" />
+    <ui:VisualElement name="root" class="root" picking-mode="Ignore">
+        <ui:Label name="objective" class="objective" text="Objectif" />
+        <ui:Label name="status" class="status" text="" />
+        <ui:Label name="help" class="help" text="ZQSD / flèches : marcher · Maj : courir · clic droit : caméra · E : frapper, parler" />
+        <ui:Label name="banner" class="banner hidden" />
+        <ui:VisualElement name="dialogue" class="dialogue hidden">
+            <ui:Label name="speaker" class="speaker" />
+            <ui:Label name="line" class="line" />
+            <ui:VisualElement name="choices" class="choices" />
+            <ui:Label class="next" text="Espace / clic : suite" />
+        </ui:VisualElement>
+        <ui:VisualElement name="title" class="title hidden">
+            <ui:Label class="title-name" text="Street Mythos" />
+            <ui:Label class="title-sub" text="Légendes du 69 · démo" />
+            <ui:Button name="new-game" text="Nouvelle partie" />
+            <ui:Button name="continue" text="Continuer" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

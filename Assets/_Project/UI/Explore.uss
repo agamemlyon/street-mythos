@@ -1,0 +1,22 @@
+/* Interface d'exploration : palette de nuit de la bible de style */
+.root { flex-grow: 1; color: #FFFFFF; -unity-font-style: bold; }
+.objective { position: absolute; top: 16px; align-self: center; font-size: 18px; color: #FFB35C; background-color: rgba(27, 27, 58, 0.85); padding: 6px 16px; border-radius: 10px; border-width: 2px; border-color: #3D2C6B; }
+.status { position: absolute; top: 16px; left: 16px; font-size: 14px; color: #8FA3C7; }
+.help { position: absolute; bottom: 12px; left: 16px; font-size: 12px; color: #8FA3C7; }
+.banner { position: absolute; top: 40%; align-self: center; font-size: 56px; color: #FFB35C; -unity-text-outline-width: 2px; -unity-text-outline-color: #1B1B3A; }
+
+.dialogue { position: absolute; bottom: 40px; left: 10%; right: 10%; min-height: 150px; background-color: rgba(27, 27, 58, 0.94); border-radius: 12px; border-width: 3px; border-color: #FFB35C; padding: 14px 20px; }
+.speaker { font-size: 20px; color: #FF4F9A; margin-bottom: 6px; }
+.line { font-size: 20px; white-space: normal; color: #FFFFFF; -unity-font-style: normal; }
+.choices { flex-direction: row; margin-top: 10px; }
+.choices Button { height: 36px; margin-right: 10px; padding: 0 14px; font-size: 16px; color: #1B1B3A; background-color: #FFB35C; border-radius: 6px; border-width: 0; }
+.choices Button:hover { background-color: #3DFFB0; }
+.next { position: absolute; right: 14px; bottom: 8px; font-size: 12px; color: #8FA3C7; }
+
+.title { position: absolute; left: 0; top: 0; right: 0; bottom: 0; align-items: center; justify-content: center; background-color: rgba(27, 27, 58, 0.92); }
+.title-name { font-size: 72px; color: #FFB35C; -unity-text-outline-width: 2px; -unity-text-outline-color: #FF4F9A; }
+.title-sub { font-size: 20px; color: #8FA3C7; margin-bottom: 30px; }
+.title Button { width: 280px; height: 48px; margin: 6px; font-size: 20px; color: #1B1B3A; background-color: #FFB35C; border-radius: 8px; border-width: 0; -unity-font-style: bold; }
+.title Button:hover { background-color: #3DFFB0; }
+.title Button:disabled { background-color: #5A5470; color: #8FA3C7; }
+.hidden { display: none; }

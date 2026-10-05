@@ -43,6 +43,8 @@
           companyName: {{{ JSON.stringify(COMPANY_NAME) }}},
           productName: {{{ JSON.stringify(PRODUCT_NAME) }}},
           productVersion: {{{ JSON.stringify(PRODUCT_VERSION) }}},
+          // Rendu en 1 pixel CSS = 1 pixel : beaucoup moins coûteux sur les écrans haute densité des portables
+          devicePixelRatio: 1,
         }, (p) => { document.getElementById("fill").style.width = (100 * p) + "%"; })
         .then(() => { document.getElementById("loader").remove(); })
         .catch((e) => { document.querySelector("#loader p").textContent = "Erreur de chargement : " + e; });
