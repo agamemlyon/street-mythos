@@ -15,7 +15,6 @@ namespace StreetMythos.Editor
         const string SettingsDir = "Assets/_Project/Settings";
         const string ScenesDir = "Assets/_Project/Scenes";
         const string LampPath = "Assets/_Project/Art/Incoming/prop_lampadaire_lyon.glb";
-        const string HeroPath = "Assets/_Project/Art/Incoming/hero_yanis.glb";
 
         // Capture de la caméra de la scène test, sans build : -executeMethod StreetMythos.Editor.SceneBootstrapper.Capture
         public static void Capture()
@@ -24,20 +23,30 @@ namespace StreetMythos.Editor
             var cam = Camera.main;
             Shoot(cam, "Builds/capture_j0.png");
 
-            // Gros plan sur le héros, avec une lumière de face pour juger le modèle
-            var hero = GameObject.Find("Yanis");
-            if (hero == null) return;
-            var b = hero.GetComponentsInChildren<Renderer>().Select(r => r.bounds).Aggregate((a, c) => { a.Encapsulate(c); return a; });
-            cam.transform.position = b.center + new Vector3(0, 0.1f, -2.8f);
-            cam.transform.LookAt(b.center);
+            // Lumière de face pour juger les modèles, puis photo de groupe et gros plans
             var key = new GameObject("Key", typeof(Light)).GetComponent<Light>();
             key.type = LightType.Directional;
             key.intensity = 1.2f;
             key.transform.rotation = Quaternion.Euler(25f, 20f, 0);
-            Shoot(cam, "Builds/capture_j0_yanis.png");
-            cam.transform.position = b.center + new Vector3(-2.8f, 0.1f, 0);
-            cam.transform.LookAt(b.center);
-            Shoot(cam, "Builds/capture_j0_yanis_profil.png");
+
+            var heroes = new[] { "Ines", "Yanis", "Momo" }.Select(GameObject.Find).Where(h => h != null).ToList();
+            if (heroes.Count == 0) return;
+            Bounds BoundsOf(GameObject g) => g.GetComponentsInChildren<Renderer>().Select(r => r.bounds).Aggregate((a, c) => { a.Encapsulate(c); return a; });
+            var all = heroes.Select(BoundsOf).Aggregate((a, c) => { a.Encapsulate(c); return a; });
+            cam.transform.position = all.center + new Vector3(0, 0.2f, -4.6f);
+            cam.transform.LookAt(all.center);
+            Shoot(cam, "Builds/capture_equipe.png");
+
+            foreach (var hero in heroes)
+            {
+                var b = BoundsOf(hero);
+                cam.transform.position = b.center + new Vector3(0, 0.1f, -2.6f);
+                cam.transform.LookAt(b.center);
+                Shoot(cam, $"Builds/capture_{hero.name.ToLowerInvariant()}.png");
+                cam.transform.position = b.center + new Vector3(0, 0.45f, -0.9f);
+                cam.transform.LookAt(b.center + new Vector3(0, b.extents.y * 0.8f, 0));
+                Shoot(cam, $"Builds/capture_{hero.name.ToLowerInvariant()}_visage.png");
+            }
         }
 
         static void Shoot(Camera cam, string path)
@@ -149,16 +158,21 @@ namespace StreetMythos.Editor
             ground.transform.localScale = new Vector3(4, 1, 4);
             ground.GetComponent<Renderer>().sharedMaterial = MakeMaterial(toon, "M_Chaussee", new Color(0.3f, 0.28f, 0.38f));
 
-            // Yanis s'il est importé, sinon une capsule témoin pour juger les contours
-            var yanis = AssetDatabase.LoadAssetAtPath<GameObject>(HeroPath);
-            if (yanis != null)
+            // L'équipe, héros par héros s'ils sont importés, sinon une capsule témoin
+            var team = new[] { ("Ines", "hero_ines", -1.3f, 1.65f), ("Yanis", "hero_yanis", 0f, 1.75f), ("Momo", "hero_momo", 1.4f, 1.85f) };
+            bool any = false;
+            foreach (var (name, file, x, height) in team)
             {
-                var hero = (GameObject)PrefabUtility.InstantiatePrefab(yanis);
-                hero.name = "Yanis";
+                var src = AssetDatabase.LoadAssetAtPath<GameObject>($"Assets/_Project/Art/Incoming/{file}.glb");
+                if (src == null) continue;
+                any = true;
+                var hero = (GameObject)PrefabUtility.InstantiatePrefab(src);
+                hero.name = name;
+                hero.transform.position = new Vector3(x, 0, 0);
                 ToonConverter.ConvertInstance(hero);
-                FitHeight(hero, 1.75f);
+                FitHeight(hero, height);
             }
-            else
+            if (!any)
             {
                 var hero = GameObject.CreatePrimitive(PrimitiveType.Capsule);
                 hero.name = "Temoin_Heros";
