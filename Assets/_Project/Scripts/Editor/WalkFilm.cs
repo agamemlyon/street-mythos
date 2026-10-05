@@ -6,39 +6,30 @@ using UnityEngine;
 
 namespace StreetMythos.Editor
 {
-    // Filme le cycle de marche de Yanis image par image (sans jouer la scène) :
-    // -executeMethod StreetMythos.Editor.WalkFilm.Run  → Builds/walk/frame_000.png…
+    // Filme l'équipe qui marche, image par image, sans jouer la scène :
+    // -executeMethod StreetMythos.Editor.WalkFilm.Run → Builds/walk/frame_000.png…
     public static class WalkFilm
     {
-        const string WalkPath = "Assets/_Project/Art/Incoming/hero_yanis_walk.glb";
+        static readonly (string file, float x, float height)[] Team =
+        {
+            ("hero_ines_walk", -1.3f, 1.65f), ("hero_yanis_walk", 0f, 1.75f), ("hero_momo_walk", 1.4f, 1.85f),
+        };
+
+        sealed class Walker
+        {
+            public GameObject Root;
+            public AnimationClip Clip;
+            public (SkinnedMeshRenderer s, GameObject p)[] Proxies;
+            public float Scale = -1f, X;
+        }
 
         public static void Run()
         {
             EditorSceneManager.OpenScene("Assets/_Project/Scenes/J0_Test.unity");
-            var old = GameObject.Find("Yanis");
-            if (old != null) Object.DestroyImmediate(old);
+            foreach (var heroName in new[] { "Ines", "Yanis", "Momo" }) { var g = GameObject.Find(heroName); if (g) Object.DestroyImmediate(g); }
 
-            var src = AssetDatabase.LoadAssetAtPath<GameObject>(WalkPath);
-            var clip = AssetDatabase.LoadAllAssetsAtPath(WalkPath).OfType<AnimationClip>()
-                                    .OrderByDescending(c => c.length).FirstOrDefault();
-            if (src == null || clip == null) { Debug.LogError("[Walk] modèle ou clip absent"); return; }
-            Debug.Log($"[Walk] clip {clip.name} {clip.length:0.00}s legacy={clip.legacy}");
-
-            var hero = (GameObject)PrefabUtility.InstantiatePrefab(src);
-            hero.name = "Yanis";
-            ToonConverter.ConvertInstance(hero);
-
-            // Diagnostic : chemins animés et mouvement réel d'un os
-            var bindings = AnimationUtility.GetCurveBindings(clip);
-            Debug.Log($"[Walk] {bindings.Length} courbes, ex. : {string.Join(" | ", bindings.Take(4).Select(x => x.path + "." + x.propertyName))}");
-            var leg = hero.GetComponentsInChildren<Transform>().FirstOrDefault(t => t.name == "LeftUpLeg");
-            var anim = hero.GetComponentInChildren<Animation>();
-            Debug.Log($"[Walk] Animation sur {(anim ? anim.gameObject.name : "rien")}, racine {hero.name}");
-            var host = anim ? anim.gameObject : hero;
-            clip.SampleAnimation(host, 0f); var r0 = leg.localRotation;
-            clip.SampleAnimation(host, 1f); var r1 = leg.localRotation;
-            Debug.Log($"[Walk] LeftUpLeg t0 {r0.eulerAngles} t1 {r1.eulerAngles}");
-            hero = host;
+            var walkers = Team.Select(t => Load(t.file, t.x)).Where(w => w != null).ToList();
+            if (walkers.Count == 0) { Debug.LogError("[Walk] aucun héros animé"); return; }
 
             var key = new GameObject("Key", typeof(Light)).GetComponent<Light>();
             key.type = LightType.Directional;
@@ -49,10 +40,33 @@ namespace StreetMythos.Editor
             Directory.CreateDirectory("Builds/walk");
             foreach (var f in Directory.GetFiles("Builds/walk")) File.Delete(f);
 
-            // Deux cycles : un de trois quarts, un de profil
+            const int fps = 30;
+            int frames = Mathf.CeilToInt(walkers.Max(w => w.Clip.length) * fps);
+            int n = 0;
+            // Un cycle de face, un de trois quarts, un de profil
+            foreach (var camPos in new[] { new Vector3(0, 1.2f, -4.4f), new Vector3(-3.0f, 1.3f, -3.4f), new Vector3(-3.1f, 1.0f, 0f) })
+                for (int i = 0; i < frames; i++)
+                {
+                    foreach (var w in walkers) Pose(w, (i / (float)fps) % w.Clip.length, Team.First(t => w.Root.name == t.file).height);
+                    cam.transform.position = camPos;
+                    cam.transform.LookAt(new Vector3(0, 0.95f, 0));
+                    Shoot(cam, $"Builds/walk/frame_{n++:000}.png");
+                }
+            Debug.Log($"[Walk] {n} images, {walkers.Count} héros");
+        }
+
+        static Walker Load(string file, float x)
+        {
+            string path = $"Assets/_Project/Art/Incoming/{file}.glb";
+            var src = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+            var clip = AssetDatabase.LoadAllAssetsAtPath(path).OfType<AnimationClip>().OrderByDescending(c => c.length).FirstOrDefault();
+            if (src == null || clip == null) { Debug.LogWarning($"[Walk] {file} absent"); return null; }
+
+            var root = (GameObject)PrefabUtility.InstantiatePrefab(src);
+            root.name = file;
+            ToonConverter.ConvertInstance(root);
             // Hors mode jeu, la peau ne suit pas les os au rendu : on « cuit » le maillage à chaque image
-            var smrs = hero.GetComponentsInChildren<SkinnedMeshRenderer>();
-            var proxies = smrs.Select(s =>
+            var proxies = root.GetComponentsInChildren<SkinnedMeshRenderer>().Select(s =>
             {
                 var p = new GameObject(s.name + "_baked", typeof(MeshFilter), typeof(MeshRenderer));
                 p.GetComponent<MeshRenderer>().sharedMaterials = s.sharedMaterials;
@@ -60,33 +74,24 @@ namespace StreetMythos.Editor
                 s.enabled = false;
                 return (s, p);
             }).ToArray();
+            return new Walker { Root = root, Clip = clip, Proxies = proxies, X = x };
+        }
 
-            float scale = -1f;
-            const int fps = 30;
-            int frames = Mathf.CeilToInt(clip.length * fps);
-            int n = 0;
-            foreach (var camOffset in new[] { new Vector3(-2.2f, 1.2f, -2.6f), new Vector3(-3.2f, 1.0f, 0f) })
-                for (int i = 0; i < frames; i++)
-                {
-                    clip.SampleAnimation(hero, i / (float)fps);
-                    foreach (var (s, p) in proxies)
-                    {
-                        var mesh = p.GetComponent<MeshFilter>().sharedMesh;
-                        s.BakeMesh(mesh, true);
-                        mesh.RecalculateBounds();
-                        // Échelle fixée une fois pour toutes sur la première image : 1,75 m de haut
-                        if (scale < 0) scale = 1.75f / mesh.bounds.size.y;
-                        p.transform.rotation = s.transform.rotation;
-                        p.transform.localScale = Vector3.one * scale;
-                        p.transform.position = Vector3.zero;
-                        p.transform.position = new Vector3(0, -p.GetComponent<Renderer>().bounds.min.y, 0); // pieds au sol
-                    }
-                    var b = proxies.Select(x => x.p.GetComponent<Renderer>().bounds).Aggregate((a, c) => { a.Encapsulate(c); return a; });
-                    cam.transform.position = new Vector3(b.center.x, 0, b.center.z) + camOffset;
-                    cam.transform.LookAt(new Vector3(b.center.x, 0.9f, b.center.z));
-                    Shoot(cam, $"Builds/walk/frame_{n++:000}.png");
-                }
-            Debug.Log($"[Walk] {n} images");
+        static void Pose(Walker w, float t, float height)
+        {
+            w.Clip.SampleAnimation(w.Root, t);
+            foreach (var (s, p) in w.Proxies)
+            {
+                var mesh = p.GetComponent<MeshFilter>().sharedMesh;
+                s.BakeMesh(mesh, true);
+                mesh.RecalculateBounds();
+                if (w.Scale < 0) w.Scale = height / mesh.bounds.size.y; // échelle fixée sur la première image
+                p.transform.rotation = s.transform.rotation;
+                p.transform.localScale = Vector3.one * w.Scale;
+                p.transform.position = Vector3.zero;
+                var b = p.GetComponent<Renderer>().bounds;
+                p.transform.position = new Vector3(w.X - b.center.x, -b.min.y, -b.center.z);
+            }
         }
 
         static void Shoot(Camera cam, string path)

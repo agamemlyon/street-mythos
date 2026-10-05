@@ -399,6 +399,71 @@
    "cost_credits": 8,
    "license": "Higgsfield, usage commercial à vérifier avant publication",
    "status": "test D3 : marche validée visuellement, à valider par Samy"
+  },
+  {
+   "id": "char_ines_apose",
+   "type": "image_ref_3d",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job_id": "04c0e3ac-bb68-4e95-9c2f-b8d9231677c8",
+   "cost_credits": 3,
+   "notes": "1re version (54eeb7d6) écartée : tenue différente de la fiche"
+  },
+  {
+   "id": "char_momo_apose",
+   "type": "image_ref_3d",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job_id": "e7993f3c-f6eb-483c-98d6-b041652442f6",
+   "cost_credits": 1.5
+  },
+  {
+   "id": "hero_ines",
+   "type": "character_3d_rigged",
+   "source": "higgsfield",
+   "model": "meshy_v7_image_to_3d",
+   "job_id": "880ed2c4-743a-4188-8f9b-8dde21e1ca8c",
+   "path": "Assets/_Project/Art/Incoming/hero_ines.glb",
+   "triangles": 29067,
+   "budget": 30000,
+   "cost_credits": 44,
+   "license": "Higgsfield, usage commercial à vérifier avant publication",
+   "status": "J1, dans le budget"
+  },
+  {
+   "id": "hero_ines_walk",
+   "type": "character_3d_rigged_anim",
+   "source": "higgsfield",
+   "model": "3d_rigging + Casual_Walk",
+   "job_id": "3f1326e9-87f3-4904-93bb-433ef2d5c18d",
+   "path": "Assets/_Project/Art/Incoming/hero_ines_walk.glb",
+   "triangles": 29067,
+   "cost_credits": 8,
+   "license": "Higgsfield, usage commercial à vérifier avant publication"
+  },
+  {
+   "id": "hero_momo",
+   "type": "character_3d_rigged",
+   "source": "higgsfield",
+   "model": "meshy_v7_image_to_3d",
+   "job_id": "ae33047f-2e11-4273-bb93-65cbd545c1f7",
+   "path": "Assets/_Project/Art/Incoming/hero_momo.glb",
+   "triangles": 28950,
+   "budget": 30000,
+   "cost_credits": 44,
+   "license": "Higgsfield, usage commercial à vérifier avant publication",
+   "status": "J1, dans le budget"
+  },
+  {
+   "id": "hero_momo_walk",
+   "type": "character_3d_rigged_anim",
+   "source": "higgsfield",
+   "model": "3d_rigging + Casual_Walk",
+   "job_id": "e2dbe73f-f82b-449a-a737-3cf80bc5b889",
+   "path": "Assets/_Project/Art/Incoming/hero_momo_walk.glb",
+   "triangles": 28950,
+   "cost_credits": 8,
+   "license": "Higgsfield, usage commercial à vérifier avant publication"
   }
  ]
 }
