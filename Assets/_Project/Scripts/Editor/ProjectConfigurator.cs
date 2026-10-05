@@ -25,7 +25,7 @@ namespace StreetMythos.Editor
         {
             PlayerSettings.SetUseDefaultGraphicsAPIs(BuildTarget.WebGL, false);
             PlayerSettings.SetGraphicsAPIs(BuildTarget.WebGL, new[] { GraphicsDeviceType.OpenGLES3 });
-            PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Brotli;
+            PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Gzip; // gzip se décompresse plus vite que le Brotli côté navigateur (décompression intégrée)
             PlayerSettings.WebGL.decompressionFallback = true; // itch.io ne sert pas les .br avec Content-Encoding : le loader décompresse lui-même
             PlayerSettings.WebGL.dataCaching = true;
             PlayerSettings.WebGL.exceptionSupport = WebGLExceptionSupport.ExplicitlyThrownExceptionsOnly;
