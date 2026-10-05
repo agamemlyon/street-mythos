@@ -15,6 +15,46 @@ namespace StreetMythos.Editor
         const string SettingsDir = "Assets/_Project/Settings";
         const string ScenesDir = "Assets/_Project/Scenes";
         const string LampPath = "Assets/_Project/Art/Incoming/prop_lampadaire_lyon.glb";
+        const string HeroPath = "Assets/_Project/Art/Incoming/hero_yanis.glb";
+
+        // Capture de la caméra de la scène test, sans build : -executeMethod StreetMythos.Editor.SceneBootstrapper.Capture
+        public static void Capture()
+        {
+            EditorSceneManager.OpenScene($"{ScenesDir}/J0_Test.unity");
+            var cam = Camera.main;
+            Shoot(cam, "Builds/capture_j0.png");
+
+            // Gros plan sur le héros, avec une lumière de face pour juger le modèle
+            var hero = GameObject.Find("Yanis");
+            if (hero == null) return;
+            var b = hero.GetComponentsInChildren<Renderer>().Select(r => r.bounds).Aggregate((a, c) => { a.Encapsulate(c); return a; });
+            cam.transform.position = b.center + new Vector3(0, 0.1f, -2.8f);
+            cam.transform.LookAt(b.center);
+            var key = new GameObject("Key", typeof(Light)).GetComponent<Light>();
+            key.type = LightType.Directional;
+            key.intensity = 1.2f;
+            key.transform.rotation = Quaternion.Euler(25f, 20f, 0);
+            Shoot(cam, "Builds/capture_j0_yanis.png");
+            cam.transform.position = b.center + new Vector3(-2.8f, 0.1f, 0);
+            cam.transform.LookAt(b.center);
+            Shoot(cam, "Builds/capture_j0_yanis_profil.png");
+        }
+
+        static void Shoot(Camera cam, string path)
+        {
+            var rt = new RenderTexture(1280, 720, 24);
+            cam.targetTexture = rt;
+            cam.Render();
+            RenderTexture.active = rt;
+            var tex = new Texture2D(1280, 720, TextureFormat.RGB24, false);
+            tex.ReadPixels(new Rect(0, 0, 1280, 720), 0, 0);
+            tex.Apply();
+            System.IO.Directory.CreateDirectory("Builds");
+            System.IO.File.WriteAllBytes(path, tex.EncodeToPNG());
+            cam.targetTexture = null;
+            RenderTexture.active = null;
+            Debug.Log($"[J0] Capture écrite dans {path}");
+        }
 
         [MenuItem("Street Mythos/Générer les scènes du J0")]
         public static void BuildAll()
@@ -109,11 +149,22 @@ namespace StreetMythos.Editor
             ground.transform.localScale = new Vector3(4, 1, 4);
             ground.GetComponent<Renderer>().sharedMaterial = MakeMaterial(toon, "M_Chaussee", new Color(0.3f, 0.28f, 0.38f));
 
-            // Personnage témoin (capsule) pour juger les contours en attendant Yanis
-            var hero = GameObject.CreatePrimitive(PrimitiveType.Capsule);
-            hero.name = "Temoin_Heros";
-            hero.transform.position = new Vector3(0, 1, 0);
-            hero.GetComponent<Renderer>().sharedMaterial = MakeMaterial(toon, "M_Temoin", new Color(1f, 0.5f, 0.2f));
+            // Yanis s'il est importé, sinon une capsule témoin pour juger les contours
+            var yanis = AssetDatabase.LoadAssetAtPath<GameObject>(HeroPath);
+            if (yanis != null)
+            {
+                var hero = (GameObject)PrefabUtility.InstantiatePrefab(yanis);
+                hero.name = "Yanis";
+                ToonConverter.ConvertInstance(hero);
+                FitHeight(hero, 1.75f);
+            }
+            else
+            {
+                var hero = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+                hero.name = "Temoin_Heros";
+                hero.transform.position = new Vector3(0, 1, 0);
+                hero.GetComponent<Renderer>().sharedMaterial = MakeMaterial(toon, "M_Temoin", new Color(1f, 0.5f, 0.2f));
+            }
 
             var lamp = AssetDatabase.LoadAssetAtPath<GameObject>(LampPath);
             for (int i = 0; i < 6; i++)

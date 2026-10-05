@@ -1,6 +1,6 @@
 {
  "version": "0.1",
- "updated": "2026-10-04",
+ "updated": "2026-10-05",
  "notes": "Fiches personnages Higgsfield (gpt_image_2_5, qualité high, 2K, 16:9). Prompts complets récupérables via les paramètres du job Higgsfield. Licence : vérifier les conditions d'usage commercial Higgsfield avant publication.",
  "assets": [
   {
@@ -365,6 +365,28 @@
    "cost_credits": 31,
    "license": "Higgsfield, usage commercial à vérifier avant publication",
    "status": "J0, dans le budget"
+  },
+  {
+   "id": "char_yanis_apose",
+   "type": "image_ref_3d",
+   "source": "higgsfield",
+   "model": "gpt_image_2_5",
+   "job_id": "35abf23c-045a-445e-a386-8a55e0477fd2",
+   "cost_credits": 1.5,
+   "status": "source du modèle 3D"
+  },
+  {
+   "id": "hero_yanis",
+   "type": "character_3d_rigged",
+   "source": "higgsfield",
+   "model": "meshy_v7_image_to_3d (texture + rig, A-pose)",
+   "job_id": "04df2324-1e04-4911-9942-bfb2f916274b",
+   "path": "Assets/_Project/Art/Incoming/hero_yanis.glb",
+   "triangles": 31140,
+   "budget": 30000,
+   "cost_credits": 44,
+   "license": "Higgsfield, usage commercial à vérifier avant publication",
+   "status": "J0 test : alternative à VRoid (D3), 4 % au-dessus du budget, casquette absente, animation non testée"
   }
  ]
 }
