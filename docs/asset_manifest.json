@@ -387,6 +387,18 @@
    "cost_credits": 44,
    "license": "Higgsfield, usage commercial à vérifier avant publication",
    "status": "J0 test : alternative à VRoid (D3), 4 % au-dessus du budget, casquette absente, animation non testée"
+  },
+  {
+   "id": "hero_yanis_walk",
+   "type": "character_3d_rigged_anim",
+   "source": "higgsfield",
+   "model": "3d_rigging + Casual_Walk (id 30)",
+   "job_id": "cc77fd90-b468-4e6d-b35b-66d3b994053e",
+   "path": "Assets/_Project/Art/Incoming/hero_yanis_walk.glb",
+   "triangles": 31140,
+   "cost_credits": 8,
+   "license": "Higgsfield, usage commercial à vérifier avant publication",
+   "status": "test D3 : marche validée visuellement, à valider par Samy"
   }
  ]
 }
