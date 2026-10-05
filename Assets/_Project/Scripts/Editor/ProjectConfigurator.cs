@@ -31,6 +31,7 @@ namespace StreetMythos.Editor
             PlayerSettings.WebGL.exceptionSupport = WebGLExceptionSupport.ExplicitlyThrownExceptionsOnly;
             if (AssetDatabase.IsValidFolder("Assets/WebGLTemplates/StreetMythos"))
                 PlayerSettings.WebGL.template = "PROJECT:StreetMythos";
+            PlayerSettings.SplashScreen.show = false; // facultatif depuis Unity 6, il retardait l'arrivée en jeu
             PlayerSettings.stripEngineCode = true;
             PlayerSettings.SetManagedStrippingLevel(NamedBuildTarget.WebGL, ManagedStrippingLevel.High);
         }

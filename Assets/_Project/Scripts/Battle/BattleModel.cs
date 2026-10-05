@@ -334,7 +334,7 @@ namespace StreetMythos.Battle
             if (source.Def.IsInes) amount = amount * 3 / 2;
             int before = target.Moral;
             target.Moral = Math.Max(0, target.Moral - amount);
-            Emit(new MoralChanged { Target = target, Delta = target.Moral - before, Vanne = vanne, Result = result });
+            Emit(new MoralChanged { Source = source, Target = target, Delta = target.Moral - before, Vanne = vanne, Result = result });
             if (target.Moral == 0 && !target.IsDestabilized)
             {
                 // Déstabilisé : perd son prochain tour, prend ×1,5 ; un boss reste Brisé 2 tours
