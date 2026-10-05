@@ -44,6 +44,7 @@ namespace StreetMythos.BattleView
         ReactionInput _input;
         readonly Dictionary<BattleUnit, UnitView> _views = new Dictionary<BattleUnit, UnitView>();
         Action _pendingCommand;
+        Opening _opening = Opening.Normal;
 
         public BattleModel Model => _model;
         public bool Finished { get; private set; }
@@ -57,6 +58,13 @@ namespace StreetMythos.BattleView
             m = System.Text.RegularExpressions.Regex.Match(Application.absoluteURL, @"niveau=([0-9]+)");
             if (m.Success) HeroLevel = int.Parse(m.Groups[1].Value);
             _data = new GameData(SkillsJson.text, HeroesJson.text, EnemiesJson.text, EncountersJson.text);
+            // Combat lancé depuis l'exploration : rencontre, niveau et premier tour viennent de la demande
+            if (StreetMythos.Core.BattleRequest.Pending)
+            {
+                EncounterId = StreetMythos.Core.BattleRequest.EncounterId;
+                HeroLevel = StreetMythos.Core.GameProgress.Current.level;
+                _opening = (Opening)StreetMythos.Core.BattleRequest.Opening;
+            }
             _input = new ReactionInput();
             _lines = new VanneLines(VannesInk);
             EnsureEventSystem();
@@ -80,7 +88,7 @@ namespace StreetMythos.BattleView
             _views.Clear();
 
             var heroes = HeroIds.Select(id => _data.BuildHero(id, HeroLevel)).ToList();
-            _model = new BattleModel(heroes, _data.BuildEncounter(EncounterId), Seed);
+            _model = new BattleModel(heroes, _data.BuildEncounter(EncounterId), Seed, _opening);
             _model.Emitted += OnEvent;
 
             int h = 0, e = 0;
@@ -200,6 +208,7 @@ namespace StreetMythos.BattleView
                 Seed++;
             }
             Finished = true;
+            ReturnToExploration();
         }
 
         IEnumerator HeroTurn(BattleUnit actor)
@@ -220,6 +229,26 @@ namespace StreetMythos.BattleView
         }
 
         BattleUnit _lungeTarget;
+
+        // Retour à la carte : gains de la victoire, zone vaincue, sauvegarde automatique (SPEC § 4.7)
+        void ReturnToExploration()
+        {
+            if (!StreetMythos.Core.BattleRequest.Pending) return;
+            var progress = StreetMythos.Core.GameProgress.Current;
+            if (_model.Outcome == BattleOutcome.Victory)
+            {
+                var enemies = _data.Encounters[EncounterId].enemies;
+                int xp = enemies.Sum(e => _data.Enemies[e].xp), balles = enemies.Sum(e => _data.Enemies[e].balles);
+                int ups = progress.GainXp(xp);
+                progress.balles += balles;
+                if (!string.IsNullOrEmpty(StreetMythos.Core.BattleRequest.ZoneId)) progress.defeated.Add(StreetMythos.Core.BattleRequest.ZoneId);
+                Debug.Log($"[Combat] victoire : +{xp} XP, +{balles} balles, {ups} niveau(x)");
+            }
+            string scene = StreetMythos.Core.BattleRequest.ReturnScene;
+            StreetMythos.Core.BattleRequest.Clear();
+            StreetMythos.Core.GameProgress.Save();
+            UnityEngine.SceneManagement.SceneManager.LoadScene(scene);
+        }
 
         void Pick(Action command, BattleUnit lungeAt = null)
         {

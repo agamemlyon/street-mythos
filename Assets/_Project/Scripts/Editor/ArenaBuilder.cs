@@ -172,7 +172,7 @@ namespace StreetMythos.Editor
             }).ToArray();
         }
 
-        static void SetBootTarget(string sceneName)
+        internal static void SetBootTarget(string sceneName)
         {
             var boot = EditorSceneManager.OpenScene(Root + "/Scenes/Boot.unity", OpenSceneMode.Single);
             var b = Object.FindFirstObjectByType<Bootstrap>();
@@ -214,7 +214,7 @@ namespace StreetMythos.Editor
             return m;
         }
 
-        static PanelSettings MakePanelSettings()
+        internal static PanelSettings MakePanelSettings()
         {
             string themePath = Root + "/UI/StreetMythosTheme.tss";
             if (!System.IO.File.Exists(themePath))
@@ -237,7 +237,7 @@ namespace StreetMythos.Editor
             return ps;
         }
 
-        static Material Mat(Shader shader, string name, Color color)
+        internal static Material Mat(Shader shader, string name, Color color)
         {
             string path = $"{Root}/Settings/{name}.mat";
             var m = AssetDatabase.LoadAssetAtPath<Material>(path);

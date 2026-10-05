@@ -1,0 +1,6 @@
+{
+    "name": "StreetMythos.Exploration",
+    "rootNamespace": "StreetMythos.Exploration",
+    "references": ["StreetMythos.Core", "Unity.InputSystem", "Ink-Libraries", "UnityEngine.UI"],
+    "autoReferenced": true
+}

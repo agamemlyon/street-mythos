@@ -22,6 +22,7 @@ function Run-Unity([string]$name, [string[]]$extra) {
 
 if (-not $SkipScenes -and (Run-Unity "scenes" @('-quit', '-executeMethod', 'StreetMythos.Editor.SceneBootstrapper.BuildAll')) -ne 0) { exit 1 }
 if (-not $SkipScenes -and (Run-Unity "arena" @('-quit', '-executeMethod', 'StreetMythos.Editor.ArenaBuilder.Build')) -ne 0) { exit 1 }
+if (-not $SkipScenes -and (Run-Unity "quartier" @('-quit', '-executeMethod', 'StreetMythos.Editor.CroixRousseBuilder.Build')) -ne 0) { exit 1 }
 
 $results = Join-Path $logs "editmode-results.xml"
 $null = Run-Unity "tests" @('-runTests', '-testPlatform', 'EditMode', '-testResults', "`"$results`"")

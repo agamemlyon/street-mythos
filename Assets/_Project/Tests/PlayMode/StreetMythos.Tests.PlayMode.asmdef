@@ -1,0 +1,8 @@
+{
+    "name": "StreetMythos.Tests.PlayMode",
+    "references": ["StreetMythos.Core", "StreetMythos.Exploration", "UnityEngine.TestRunner", "UnityEditor.TestRunner"],
+    "overrideReferences": true,
+    "precompiledReferences": ["nunit.framework.dll"],
+    "defineConstraints": ["UNITY_INCLUDE_TESTS"],
+    "autoReferenced": false
+}
