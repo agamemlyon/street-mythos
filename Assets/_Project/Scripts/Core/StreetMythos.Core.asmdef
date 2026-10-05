@@ -1,0 +1,6 @@
+{
+    "name": "StreetMythos.Core",
+    "rootNamespace": "StreetMythos.Core",
+    "references": [],
+    "autoReferenced": true
+}
