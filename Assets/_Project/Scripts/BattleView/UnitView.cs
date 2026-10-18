@@ -26,7 +26,12 @@ namespace StreetMythos.BattleView
             _renderers = GetComponentsInChildren<Renderer>();
             if (_anim != null)
                 foreach (AnimationState s in _anim)
+                {
                     if (s.name.Contains("Walk")) _walk = s.name;
+                    // Clips « yanis_attaque »… rangés par action
+                    foreach (var action in Actions)
+                        if (s.name.EndsWith("_" + action)) _clips[action] = s.name;
+                }
             Idle();
         }
 
@@ -40,13 +45,16 @@ namespace StreetMythos.BattleView
             return top - transform.position.y + 0.2f;
         }
 
-        bool Has(string clip) => _anim != null && _anim[clip] != null;
+        static readonly string[] Actions = { "stance", "attaque", "esquive", "parade" };
+        readonly System.Collections.Generic.Dictionary<string, string> _clips = new System.Collections.Generic.Dictionary<string, string>();
 
-        // Joue un clip, accéléré pour tenir dans maxDuration (les clips de la bibliothèque durent jusqu'à 7 s) ;
-        // renvoie la durée réelle (0 s'il n'existe pas)
+        // Joue un clip (nom d'action ou nom réel), accéléré pour tenir dans maxDuration (les clips de la
+        // bibliothèque durent jusqu'à 7 s) ; renvoie la durée réelle (0 s'il n'existe pas)
         float PlayClip(string clip, float fade = 0.1f, bool loop = false, float maxDuration = 0f)
         {
-            if (!Has(clip)) return 0f;
+            if (_anim == null) return 0f;
+            if (_clips.TryGetValue(clip, out var real)) clip = real;
+            if (_anim[clip] == null) return 0f;
             var state = _anim[clip];
             state.wrapMode = loop ? WrapMode.Loop : WrapMode.ClampForever;
             state.speed = maxDuration > 0 && state.length > maxDuration ? state.length / maxDuration : 1f;

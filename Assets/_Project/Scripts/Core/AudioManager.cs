@@ -29,7 +29,8 @@ namespace StreetMythos.Core
                     _instance._sfxSource = go.AddComponent<AudioSource>();
                     _instance._musicSource = go.AddComponent<AudioSource>();
                     _instance._musicSource.loop = true;
-                    foreach (var c in Resources.LoadAll<AudioClip>("Sons")) _instance._sfx[c.name] = c;
+                    foreach (var c in Resources.LoadAll<AudioClip>("Sons")) { c.LoadAudioData(); _instance._sfx[c.name] = c; }
+                    Debug.Log($"[Audio] {_instance._sfx.Count} bruitages chargés");
                 }
                 return _instance;
             }
@@ -44,7 +45,7 @@ namespace StreetMythos.Core
                 var variants = new List<AudioClip>();
                 for (int i = 0; i < 6; i++)
                     if (a._sfx.TryGetValue($"{name}_{i}", out var v)) variants.Add(v);
-                if (variants.Count == 0) return;
+                if (variants.Count == 0) { Debug.LogWarning($"[Audio] bruitage {name} absent"); return; }
                 clip = variants[Random.Range(0, variants.Count)];
             }
             a._sfxSource.pitch = Random.Range(0.94f, 1.06f);
@@ -84,8 +85,14 @@ namespace StreetMythos.Core
                         yield break;
                     }
                     clip = DownloadHandlerAudioClip.GetContent(req);
-                    _music[track] = clip;
                 }
+                // Dans le navigateur, le décodage du MP3 se termine après la requête
+                if (clip != null && clip.loadState != AudioDataLoadState.Loaded) clip.LoadAudioData();
+                for (float t = 0; clip != null && clip.loadState != AudioDataLoadState.Loaded && clip.loadState != AudioDataLoadState.Failed && t < 15f; t += Time.unscaledDeltaTime)
+                    yield return null;
+                Debug.Log($"[Audio] musique {track} : {(clip == null ? "null" : clip.length.ToString("0") + " s, " + clip.loadState)}");
+                if (clip == null || clip.loadState != AudioDataLoadState.Loaded) yield break;
+                _music[track] = clip;
             }
             if (_currentMusic != track) yield break;
             _musicSource.clip = clip;

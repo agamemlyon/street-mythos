@@ -32,6 +32,8 @@ namespace StreetMythos.Exploration
             _status = root.Q<Label>("status");
             _dialogue = new DialoguePlayer(StoryInk, root);
 
+            // La musique démarre dès le menu titre (le navigateur la lance au premier clic)
+            AudioManager.Music("exploration");
             if (!_sessionStarted) yield return TitleMenu(root);
             _sessionStarted = true;
 
@@ -93,8 +95,8 @@ namespace StreetMythos.Exploration
             bool chosen = false;
             var cont = root.Q<Button>("continue");
             cont.SetEnabled(GameProgress.HasSave);
-            cont.clicked += () => { GameProgress.Load(); chosen = true; };
-            root.Q<Button>("new-game").clicked += () => { GameProgress.NewGame(); chosen = true; };
+            cont.clicked += () => { AudioManager.Play("menu"); GameProgress.Load(); chosen = true; };
+            root.Q<Button>("new-game").clicked += () => { AudioManager.Play("menu"); GameProgress.NewGame(); chosen = true; };
             while (!chosen) yield return null;
             menu.AddToClassList("hidden");
             Player.Frozen = false;

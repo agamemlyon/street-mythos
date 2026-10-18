@@ -58,16 +58,21 @@ namespace StreetMythos.Editor
             }
         }
 
-        // Ajoute à l'Animation d'un personnage les clips extraits « <qui>_<action> »
+        // Ajoute à l'Animation d'un personnage les clips extraits « <qui>_<action> ». Ils gardent leur nom :
+        // AddClip sous un autre nom crée une copie en mémoire que le prefab ne peut pas enregistrer.
+        // UnitView les retrouve par leur suffixe.
         public static void AddClips(GameObject instance, string who)
         {
             var anim = instance.GetComponentInChildren<Animation>();
             if (anim == null) return;
+            var clips = AnimationUtility.GetAnimationClips(anim.gameObject).ToList();
             foreach (var action in new[] { "stance", "attaque", "esquive", "parade" })
             {
                 var clip = AssetDatabase.LoadAssetAtPath<AnimationClip>($"{Dir}/{who}_{action}.anim");
-                if (clip != null) anim.AddClip(clip, action);
+                if (clip == null) { Debug.LogWarning($"[Anim] clip {who}_{action} absent"); continue; }
+                clips.Add(clip);
             }
+            AnimationUtility.SetAnimationClips(anim, clips.ToArray());
         }
     }
 }
