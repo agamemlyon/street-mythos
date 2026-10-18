@@ -97,6 +97,21 @@ namespace StreetMythos.Editor
             if (heroPrefab != null) ((GameObject)PrefabUtility.InstantiatePrefab(heroPrefab)).transform.SetParent(player.transform, false);
             var pc = player.AddComponent<PlayerController>();
 
+            // Inès et Momo suivent Yanis à la trace, en V de part et d'autre (hors de l'axe de la caméra)
+            float mateSide = -0.9f;
+            foreach (var mate in new[] { "Hero_Ines", "Hero_Momo" })
+            {
+                var prefab = AssetDatabase.LoadAssetAtPath<GameObject>($"{Root}/Art/Characters/{mate}.prefab");
+                if (prefab == null) continue;
+                var go = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
+                go.name = mate.Replace("Hero_", "Equipier_");
+                var f = go.AddComponent<Follower>();
+                f.Leader = player.transform;
+                f.Distance = 1.3f;
+                f.Side = mateSide;
+                mateSide = -mateSide;
+            }
+
             var cam = new GameObject("Main Camera", typeof(Camera)).GetComponent<Camera>();
             cam.tag = "MainCamera";
             cam.clearFlags = CameraClearFlags.SolidColor;
