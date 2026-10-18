@@ -100,6 +100,22 @@ PrefabInstance:
       propertyPath: m_Animations.Array.size
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 5423227893274847144, guid: 9ede96539739a2e4abc67424e228c48d, type: 3}
+      propertyPath: 'm_Animations.Array.data[1]'
+      value: 
+      objectReference: {fileID: 7400000, guid: 25001943206dcb948b79c3f340ee2986, type: 2}
+    - target: {fileID: 5423227893274847144, guid: 9ede96539739a2e4abc67424e228c48d, type: 3}
+      propertyPath: 'm_Animations.Array.data[2]'
+      value: 
+      objectReference: {fileID: 7400000, guid: 37a98aec6c6cd264bb45ce1153fc978d, type: 2}
+    - target: {fileID: 5423227893274847144, guid: 9ede96539739a2e4abc67424e228c48d, type: 3}
+      propertyPath: 'm_Animations.Array.data[3]'
+      value: 
+      objectReference: {fileID: 7400000, guid: 010e0b7ad17463c4ca5ce9b042c48e16, type: 2}
+    - target: {fileID: 5423227893274847144, guid: 9ede96539739a2e4abc67424e228c48d, type: 3}
+      propertyPath: 'm_Animations.Array.data[4]'
+      value: 
+      objectReference: {fileID: 7400000, guid: 354bab6e345d0b145bd7534cec3e65c2, type: 2}
     - target: {fileID: 8855313084568243120, guid: 9ede96539739a2e4abc67424e228c48d, type: 3}
       propertyPath: m_DirtyAABB
       value: 0

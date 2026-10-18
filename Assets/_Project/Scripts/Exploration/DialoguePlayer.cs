@@ -65,6 +65,7 @@ namespace StreetMythos.Exploration
                     _text.text = line;
                     yield return null; // l'appui qui a ouvert le dialogue ne doit pas sauter la première ligne
                     while (!_next.WasPressedThisFrame()) yield return null;
+                    AudioManager.Play("menu", 0.4f);
                 }
                 if (_story.currentChoices.Count == 0) break;
 
@@ -73,7 +74,7 @@ namespace StreetMythos.Exploration
                 foreach (var c in _story.currentChoices)
                 {
                     int i = c.index;
-                    _choices.Add(new Button(() => _picked = i) { text = c.text });
+                    _choices.Add(new Button(() => { AudioManager.Play("menu", 0.7f); _picked = i; }) { text = c.text });
                 }
                 while (_picked < 0) yield return null;
                 _choices.Clear();
